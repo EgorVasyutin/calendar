@@ -1,18 +1,13 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <task-card></task-card>
+  <div>
+    <router-link to="/authorization">authorization</router-link>
+    <router-link to="/login">login</router-link>
+  </div>
+  <router-view></router-view>
 </template>
 
-<script>
-import HelloWorld from "./components/HelloWorld.vue";
-
-export default {
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-};
-</script>
+<script setup></script>
 
 <style lang="scss">
 #app {
@@ -24,3 +19,9 @@ export default {
   margin-top: 60px;
 }
 </style>
+<script>
+import TaskCard from "@/components/TaskCard";
+export default {
+  components: { TaskCard },
+};
+</script>
