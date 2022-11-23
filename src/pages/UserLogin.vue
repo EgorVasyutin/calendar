@@ -1,13 +1,7 @@
 <template class="template">
   <form class="container" @submit.prevent="submitForm">
-    <div class="text">Authorization</div>
+    <div class="text">Login</div>
     <div>
-      <app-input
-        placeholder="Name"
-        label="Your name"
-        v-model:value="v.nameField.$model"
-        :error="v.nameField.$errors"
-      ></app-input>
       <app-input
         type="email"
         placeholder="Email"
@@ -22,42 +16,20 @@
         v-model:value="v.passwordField.$model"
         :error="v.passwordField.$errors"
       ></app-input>
-      <app-input
-        type="password"
-        placeholder="Confirm password"
-        label="Confirm password"
-        v-model:value="v.confirmPasswordField.$model"
-        :error="v.confirmPasswordField.$errors"
-      ></app-input>
     </div>
-    <app-button label="Authorization" />
+    <app-button label="Login" />
   </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import useVuelidate from "@vuelidate/core";
 import { ref, computed } from "vue";
-import {
-  minLength,
-  helpers,
-  email,
-  sameAs,
-  required,
-} from "@vuelidate/validators";
+import { minLength, helpers, email, required } from "@vuelidate/validators";
 
-const nameField = ref("");
 const emailField = ref("");
 const passwordField = ref("");
-const confirmPasswordField = ref("");
 
 const rules = computed(() => ({
-  nameField: {
-    required: helpers.withMessage("Это поле обязательно", required),
-    minLength: helpers.withMessage(
-      "Минимальная длина: 3 символа",
-      minLength(3)
-    ),
-  },
   emailField: {
     required: helpers.withMessage("Это поле обязательно", required),
     email: helpers.withMessage("Вы ввели не верный email", email),
@@ -69,20 +41,11 @@ const rules = computed(() => ({
       minLength(6)
     ),
   },
-  confirmPasswordField: {
-    required: helpers.withMessage("Это поле обязательно", required),
-    sameAsPassword: helpers.withMessage(
-      "Пароли не совпадают",
-      sameAs(passwordField.value)
-    ),
-  },
 }));
 
 const v = useVuelidate(rules, {
-  nameField,
   emailField,
   passwordField,
-  confirmPasswordField,
 });
 
 const submitForm = () => {

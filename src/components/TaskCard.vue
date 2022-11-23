@@ -2,19 +2,19 @@
   <div class="card">
     <div class="card_container">
       <div class="card-content">
-        <div class="card-content__name">{{ name }}</div>
+        <div class="card-content__name">{{ task.title }}</div>
         <div class="card-content__container">
           <div class="card-content__container--status">
-            <div class="status">{{ status }}</div>
+            <div class="status">asd</div>
           </div>
           <div class="card-content__container--checkbox">
-            <app-checkbox label="готово" :checked="checked" />
+            <app-checkbox label="готово" :checked="true" />
           </div>
-          <div class="card-content__container--priority">
-            <div class="priority">{{ priority }}</div>
+          <div class="card-content__container--priority" v-if="true">
+            <div class="priority">asd</div>
           </div>
-          <div class="card-content__container--type">
-            <div class="type">{{ type }}</div>
+          <div class="card-content__container--type" v-if="true">
+            <div class="type">asd</div>
           </div>
         </div>
       </div>
@@ -22,28 +22,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
-  name: {
-    type: String,
+  task: {
+    type: Object,
     required: true,
-  },
-  checked: {
-    type: Boolean,
-    default: false,
-  },
-  status: {
-    type: String,
-    default: "фвы",
-  },
-  priority: {
-    type: String,
-    default: "фыв",
-  },
-  type: {
-    type: String,
-    default: "Задача",
   },
 });
 </script>
@@ -52,11 +36,15 @@ const props = defineProps({
 .card {
   position: absolute;
   padding: 3px 6px;
-  width: calc(14.2857%);
-  left: calc(57.1429%);
-  height: 130px;
-  top: 30px;
+  width: 100%;
+  height: 200px;
+  top: 50px;
 }
+.card_container:hover {
+  background-color: #eeeeee;
+  transition: 0.1s;
+}
+
 .card_container {
   display: block;
   color: inherit;
@@ -72,22 +60,22 @@ const props = defineProps({
   transition: background 20ms ease-in 0s;
   cursor: pointer;
   width: 100%;
-  display: flex;
   position: relative;
   padding-top: 2px;
   padding-bottom: 2px;
   height: 100%;
   align-items: flex-start;
-  flex-direction: column;
 
   &__name {
     padding-left: 6px;
     padding-right: 6px;
     overflow: hidden;
-    width: 100%;
+    width: 42%;
     flex-grow: 1;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 10px;
   }
 
   &__container {

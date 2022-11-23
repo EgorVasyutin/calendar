@@ -1,5 +1,4 @@
 <template>
-  <task-card></task-card>
   <div>
     <router-link to="/authorization">authorization</router-link>
     <router-link to="/login">login</router-link>
@@ -7,7 +6,7 @@
   <router-view></router-view>
 </template>
 
-<script setup></script>
+<script setup lang="ts"></script>
 
 <style lang="scss">
 #app {
@@ -19,9 +18,3 @@
   margin-top: 60px;
 }
 </style>
-<script>
-import TaskCard from "@/components/TaskCard";
-export default {
-  components: { TaskCard },
-};
-</script>
