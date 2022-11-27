@@ -35,7 +35,7 @@ const useTasks = () => {
     startDate,
     endDate
   ) => {
-    await axiosInstance.put(`todos/:${id}`, {
+    await axiosInstance.put(`todos/${id}`, {
       title,
       isDone,
       priority,

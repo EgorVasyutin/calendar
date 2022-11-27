@@ -8,7 +8,12 @@
             <div class="status">asd</div>
           </div>
           <div class="card-content__container--checkbox">
-            <app-checkbox label="готово" :checked="true" />
+            <input
+              type="checkbox"
+              class="checkbox"
+              :checked="task.isDone"
+              @click.stop="clickOnCheckbox"
+            />
           </div>
           <div class="card-content__container--priority" v-if="true">
             <div class="priority">asd</div>
@@ -24,12 +29,19 @@
 
 <script setup lang="ts">
 // eslint-disable-next-line no-undef,no-unused-vars
+const emit = defineEmits(["clickOnCheckbox"]);
+
+// eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
   task: {
     type: Object,
     required: true,
   },
 });
+
+const clickOnCheckbox = () => {
+  emit("clickOnCheckbox");
+};
 </script>
 
 <style scoped lang="scss">

@@ -27,6 +27,7 @@
       class="task_card"
       id="task"
       :task="task"
+      @click-on-checkbox="changeCheckbox(task.id)"
     ></task-card>
   </div>
 </template>
@@ -36,7 +37,12 @@ import taskCard from "@/components/TaskCard.vue";
 import { ref } from "vue";
 
 // eslint-disable-next-line no-undef
-const emits = defineEmits(["open", "open-redact", "new-card"]);
+const emits = defineEmits([
+  "open",
+  "open-redact",
+  "new-card",
+  "change-checkbox",
+]);
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
@@ -51,6 +57,7 @@ const props = defineProps({
 });
 
 const modalOpenRedact = (id) => {
+  emits("open");
   emits("open-redact", id);
 };
 
@@ -59,6 +66,10 @@ const plusVisibility = ref("hidden");
 const modalOpen = () => {
   emits("open");
   newCard();
+};
+
+const changeCheckbox = (id) => {
+  emits("change-checkbox", id);
 };
 
 const newCard = () => {

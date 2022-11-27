@@ -71,8 +71,9 @@
             :date="dats[idx]"
             :tasks="getFieldTasks(dats[idx])"
             @open="modalOpen"
-            @new-card="newCard"
+            @new-card="createCard"
             @open-redact="modalOpenRedact"
+            @change-checkbox="changeCheckbox"
           />
         </div>
       </div>
@@ -98,15 +99,13 @@
             <div class="string-text">Data</div>
           </div>
           <div class="container--data">
-            <input
-              v-model="startDate"
-              class="startData string-right string-text-2"
+            <datepicker
+              range
+              lang="en"
+              type="date"
+              v-model="dateModel"
+              class="startData"
               placeholder="Start data "
-            />
-            <input
-              v-model="endDate"
-              class="endData string-right string-text-2"
-              placeholder=" End data"
             />
           </div>
         </div>
@@ -131,7 +130,12 @@
             <div class="string-text">Готово</div>
           </div>
           <div class="string-right string-text">
-            <app-checkbox :checked="isDone" />
+            <input
+              type="checkbox"
+              class="checkbox"
+              :checked="isDone"
+              @click="clickOnCheckbox"
+            />
           </div>
         </div>
         <div class="modal-content__table--string">
@@ -193,6 +197,9 @@ import { ref, watch } from "vue";
 import AppField from "@/components/AppField.vue";
 import useTasks from "@/composables/useTasks";
 
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+
 import modalWindow from "@/components/ModalWindow.vue";
 import { Task } from "@/types";
 
@@ -203,12 +210,42 @@ const title = ref<string>("");
 const isDone = ref<boolean>(false);
 const type = ref<string>("sss5");
 const priority = ref<string>("normal");
+const dateModel = ref<string[]>([]);
 const startDate = ref<string>(new Date().toISOString());
 const endDate = ref<string>(new Date().toISOString());
 
 const dats = ref<string[]>([]);
 
 let modalValue = ref(false);
+
+const clickOnCheckbox = () => {
+  isDone.value = !isDone.value;
+};
+
+const createCard = () => {
+  watch(modalValue, () =>
+    newCard(
+      title.value,
+      isDone.value,
+      priority.value,
+      type.value,
+      startDate.value,
+      endDate.value
+    ).then(getCards)
+  );
+};
+
+const changeCheckbox = (id) => {
+  redact(
+    id,
+    title.value,
+    isDone.value,
+    priority.value,
+    type.value,
+    startDate.value,
+    endDate.value
+  ).then(getCards);
+};
 
 getCards();
 
@@ -222,15 +259,6 @@ const renderingCards = (): void => {
 };
 renderingCards();
 
-newCard(
-  title.value,
-  isDone.value,
-  priority.value,
-  type.value,
-  startDate.value,
-  endDate.value
-);
-
 const getFieldTasks = (date: string): Task[] => {
   return tasks.value.filter(
     (task) =>
@@ -239,7 +267,6 @@ const getFieldTasks = (date: string): Task[] => {
 };
 
 const modalOpenRedact = (id) => {
-  modalValue.value = true;
   watch(modalValue, () =>
     redact(
       id,
@@ -249,7 +276,7 @@ const modalOpenRedact = (id) => {
       type.value,
       startDate.value,
       endDate.value
-    )
+    ).then(getCards)
   );
 };
 
@@ -611,9 +638,9 @@ const modalOpen = () => {
 .container--data {
   width: 100%;
   padding: 6px 8px 5px;
-  display: flex;
 
   .startData {
+    width: 100%;
     overflow: hidden;
     border: none;
     outline: none;
@@ -685,5 +712,10 @@ const modalOpen = () => {
   height: 1px;
   background: rgba(55, 53, 47, 0.09);
   margin-bottom: 8px;
+}
+
+.checkbox {
+  width: 25px;
+  height: 25px;
 }
 </style>
