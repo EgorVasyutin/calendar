@@ -44,6 +44,7 @@ import {
   sameAs,
   required,
 } from "@vuelidate/validators";
+import axiosInstance from "@/axiosInstance";
 
 const nameField = ref("");
 const emailField = ref("");
@@ -88,7 +89,11 @@ const v = useVuelidate(rules, {
 const submitForm = () => {
   v.value.$touch();
   if (v.value.$error) return;
-  alert("Form submitted");
+  axiosInstance.post("/sign-up", {
+    username: v.value.nameField.$model,
+    email: v.value.emailField.$model,
+    password: v.value.passwordField.$model,
+  });
 };
 </script>
 

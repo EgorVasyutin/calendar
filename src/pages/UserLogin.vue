@@ -25,6 +25,7 @@
 import useVuelidate from "@vuelidate/core";
 import { ref, computed } from "vue";
 import { minLength, helpers, email, required } from "@vuelidate/validators";
+import axiosInstance from "@/axiosInstance";
 
 const emailField = ref("");
 const passwordField = ref("");
@@ -51,7 +52,10 @@ const v = useVuelidate(rules, {
 const submitForm = () => {
   v.value.$touch();
   if (v.value.$error) return;
-  alert("Form submitted");
+  axiosInstance.post("/sign-in", {
+    email: v.value.emailField.$model,
+    password: v.value.passwordField.$model,
+  });
 };
 </script>
 

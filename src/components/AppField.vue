@@ -1,5 +1,8 @@
 <template>
   <div
+    @drop="onDrop"
+    @dragover.prevent
+    @dragenter.prevent
     ref="day"
     class="day"
     @mouseover="() => (plusVisibility = 'visible')"
@@ -28,6 +31,7 @@
       id="task"
       :task="task"
       @click-on-checkbox="changeCheckbox(task.id)"
+      @delete-todo="deleteTodo(task.id)"
     ></task-card>
   </div>
 </template>
@@ -42,6 +46,9 @@ const emits = defineEmits([
   "open-redact",
   "new-card",
   "change-checkbox",
+  "delete-todo",
+  "drag-task",
+  "redact-task-date",
 ]);
 
 // eslint-disable-next-line no-unused-vars,no-undef
@@ -56,9 +63,18 @@ const props = defineProps({
   },
 });
 
+const onDrop = (e) => {
+  const taskId = parseInt(e.dataTransfer.getData("taskId"));
+  emits("redact-task-date", taskId, props.date);
+};
+
 const modalOpenRedact = (id) => {
   emits("open");
   emits("open-redact", id);
+};
+
+const deleteTodo = (id) => {
+  emits("delete-todo", id);
 };
 
 const plusVisibility = ref("hidden");
@@ -67,6 +83,8 @@ const modalOpen = () => {
   emits("open");
   newCard();
 };
+
+// const onDrop = (taskId, startDate) => {};
 
 const changeCheckbox = (id) => {
   emits("change-checkbox", id);
@@ -85,9 +103,8 @@ const newCard = () => {
   fill: rgba(55, 53, 47, 0.45);
 }
 .day {
-  position: relative;
   width: 250px;
-  height: 250px;
+  min-height: 250px;
   flex: 1 0 0px;
   border-right: 1px solid rgb(233, 233, 231);
   border-bottom: 1px solid rgb(233, 233, 231);
@@ -97,6 +114,7 @@ const newCard = () => {
   &__container {
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
     margin: 10px;
 
     &--plus {

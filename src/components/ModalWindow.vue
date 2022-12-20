@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppPopper from "@/components/AppPopper.vue";
+import { ref } from "vue";
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
   modalOpen: {
@@ -7,10 +9,22 @@ const props = defineProps({
   },
 });
 // eslint-disable-next-line no-undef,no-unused-vars
-const emit = defineEmits(["modal-close"]);
+const emit = defineEmits(["modal-close", "delete-todo-modal"]);
 
 const closeModal = () => {
   emit("modal-close");
+};
+
+const deleteTodo = () => {
+  emit("delete-todo-modal");
+  openAndClosePopper();
+  closeModal();
+};
+
+const showPopper = ref(false);
+
+const openAndClosePopper = () => {
+  showPopper.value = !showPopper.value;
 };
 </script>
 
@@ -119,7 +133,7 @@ const closeModal = () => {
               </svg>
             </div>
             <div class="icon__ellipsis--left">
-              <svg viewBox="0 0 13 3" class="dots">
+              <svg viewBox="0 0 13 3" class="dots" @click="openAndClosePopper">
                 <g>
                   <path
                     d="M3,1.5A1.5,1.5,0,1,1,1.5,0,1.5,1.5,0,0,1,3,1.5Z"
@@ -132,6 +146,15 @@ const closeModal = () => {
                   ></path>
                 </g>
               </svg>
+              <app-popper
+                class="popper"
+                :showPopper="showPopper"
+                @close="openAndClosePopper"
+                @click.stop
+              >
+                <button class="popper__btm" @click="deleteTodo">Delete</button>
+                <button class="popper__btm">Copy</button>
+              </app-popper>
             </div>
           </div>
         </div>
@@ -144,6 +167,21 @@ const closeModal = () => {
 </template>
 
 <style scoped lang="scss">
+.popper__btm {
+  width: 240px;
+  height: 35px;
+  background-color: #fff;
+  border: none;
+  font-size: 16px;
+}
+.popper__btm:hover {
+  background-color: #eeeeee;
+  transition: 0.1s;
+}
+.popper {
+  left: 860px;
+  top: 35px;
+}
 .modal {
   z-index: 2;
   display: flex;
@@ -162,7 +200,7 @@ const closeModal = () => {
   height: calc(100% - 144px);
 
   &-header {
-    z-index: 110;
+    z-index: 3;
     background: white;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -362,6 +400,7 @@ const closeModal = () => {
 }
 
 .dots {
+  position: relative;
   width: 18px;
   height: 18px;
   display: block;

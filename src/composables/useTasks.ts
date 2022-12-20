@@ -45,11 +45,21 @@ const useTasks = () => {
     });
   };
 
+  const deleteTodo = async (id) => {
+    await axiosInstance.delete(`todos/${id}`);
+  };
+
+  const patch = async (id, value) => {
+    await axiosInstance.patch(`todos/${id}`, value);
+  };
+
   return {
     getCards,
     tasks,
     newCard,
     redact,
+    deleteTodo,
+    patch,
   };
 };
 

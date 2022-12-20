@@ -5,13 +5,7 @@
         <div class="content-menu__fn__container--field data">No date ()</div>
         <div class="content-menu__fn__container--field filter">Filter</div>
         <div class="content-menu__fn__container--field sort">Sort</div>
-        <div class="content-menu__fn__container--field search">
-          <svg viewBox="0 0 16 16" class="collectionSearch">
-            <path
-              d="M0 6.35938C0 9.86719 2.85156 12.7188 6.35938 12.7188C7.66406 12.7188 8.85938 12.3203 9.85938 11.6406L13.4531 15.2344C13.6719 15.4609 13.9766 15.5625 14.2812 15.5625C14.9453 15.5625 15.4219 15.0625 15.4219 14.4141C15.4219 14.1016 15.3125 13.8125 15.1016 13.5938L11.5312 10.0156C12.2734 8.99219 12.7188 7.72656 12.7188 6.35938C12.7188 2.85156 9.86719 0 6.35938 0C2.85156 0 0 2.85156 0 6.35938ZM1.65625 6.35938C1.65625 3.76562 3.75781 1.65625 6.35938 1.65625C8.95312 1.65625 11.0625 3.76562 11.0625 6.35938C11.0625 8.95312 8.95312 11.0625 6.35938 11.0625C3.75781 11.0625 1.65625 8.95312 1.65625 6.35938Z"
-            ></path>
-          </svg>
-        </div>
+        <div class="content-menu__fn__container--field search"></div>
         <div class="content-menu__fn__container--field arrows">
           <svg viewBox="0 0 13 3" class="dots">
             <g>
@@ -39,14 +33,18 @@
       </div>
       <div class="month-switch">
         <div class="month-switch__arrow-left">
-          <svg viewBox="0 0 30 30" class="month-switch__arrow-left--svg">
+          <svg
+            @click="scrollMonthAgo"
+            viewBox="0 0 30 30"
+            class="month-switch__arrow-left--svg"
+          >
             <polygon
               points="12.6 15 23 25.2 20.2 28 7 15 20.2 2 23 4.8"
             ></polygon>
           </svg>
         </div>
-        <div class="month-switch__text">Today</div>
-        <div class="month-switch__arrow-right">
+        <div class="month-switch__text" @click="scrollToday">Today</div>
+        <div @click="scrollMonthBefore" class="month-switch__arrow-right">
           <svg viewBox="0 0 30 30" class="month-switch__arrow-left--svg">
             <polygon points="17.4,15 7,25.2 9.8,28 23,15 9.8,2 7,4.8"></polygon>
           </svg>
@@ -69,11 +67,13 @@
             v-for="(fieldLine, idx) in dats.length"
             :key="fieldLine"
             :date="dats[idx]"
-            :tasks="getFieldTasks(dats[idx])"
+            :tasks="getFieldTasks(dats[idx].slice(0, 11))"
             @open="modalOpen"
             @new-card="createCard"
             @open-redact="modalOpenRedact"
             @change-checkbox="changeCheckbox"
+            @delete-todo="deleteTask"
+            @redact-task-date="changeTaskStartDate"
           />
         </div>
       </div>
@@ -146,8 +146,23 @@
               ></path>
             </svg>
             <div class="string-text">Приоритет</div>
+            <app-popper
+              class="popper"
+              @click="showPopper('priority')"
+              :showPopper="priorityShow"
+            >
+              <button class="popper__btm" @click="priorityPush">1</button>
+              <button class="popper__btm" @click="priorityPush">2</button>
+              <button class="popper__btm" @click="priorityPush">3</button>
+            </app-popper>
           </div>
-          <div class="green string-text-2 string-right">{{ priority }}</div>
+          <div
+            class="green string-text-2 string-right"
+            v-for="priority in priorityArr"
+            :key="priority"
+          >
+            {{ priority }}
+          </div>
         </div>
         <div class="modal-content__table--string">
           <div class="string-left">
@@ -196,14 +211,14 @@
 import { ref, watch } from "vue";
 import AppField from "@/components/AppField.vue";
 import useTasks from "@/composables/useTasks";
-
-import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 import modalWindow from "@/components/ModalWindow.vue";
 import { Task } from "@/types";
+import Datepicker from "@vuepic/vue-datepicker";
+import AppPopper from "@/components/AppPopper.vue";
 
-const { tasks, getCards, newCard, redact } = useTasks();
+const { tasks, getCards, newCard, redact, deleteTodo, patch } = useTasks();
 
 // eslint-disable-next-line no-unused-vars
 const title = ref<string>("");
@@ -213,17 +228,46 @@ const priority = ref<string>("normal");
 const dateModel = ref<string[]>([]);
 const startDate = ref<string>(new Date().toISOString());
 const endDate = ref<string>(new Date().toISOString());
+const priorityArr = ref([]);
 
-const dats = ref<string[]>([]);
+const priorityShow = ref(false);
+
+const idTodo = ref("");
+
+const dats = ref([]);
+const fullDates = ref<string[]>([]);
 
 let modalValue = ref(false);
 
-const clickOnCheckbox = () => {
-  isDone.value = !isDone.value;
+const renderingCards = (): void => {
+  for (let i = -14; i < 14; i++) {
+    const date = new Date();
+
+    date.setDate(date.getDate() + i);
+    dats.value.push(date.toISOString());
+    fullDates.value.push(date.toISOString());
+  }
+};
+renderingCards();
+
+getCards();
+
+const clickOnCheckbox = async (id) => {
+  await tasks.value.forEach((task) => {
+    if (task.id === id) isDone.value = !task.isDone;
+  });
 };
 
+watch(dateModel, () => {
+  if (dateModel.value.length) {
+    startDate.value = dateModel.value[0].toISOString();
+    endDate.value = dateModel.value[1].toISOString();
+  }
+});
+
 const createCard = () => {
-  watch(modalValue, () =>
+  //без watch-а
+  watch(modalValue, () => {
     newCard(
       title.value,
       isDone.value,
@@ -231,33 +275,87 @@ const createCard = () => {
       type.value,
       startDate.value,
       endDate.value
-    ).then(getCards)
-  );
+    ).then(getCards);
+  });
+};
+
+const changeTaskStartDate = (id, date) => {
+  patch(id, { startDate: date });
+  patch(id, { endDate: date }).then(getCards);
 };
 
 const changeCheckbox = (id) => {
-  redact(
-    id,
-    title.value,
-    isDone.value,
-    priority.value,
-    type.value,
-    startDate.value,
-    endDate.value
-  ).then(getCards);
+  clickOnCheckbox(id);
+  patch(id, { isDone: isDone.value }).then(getCards);
 };
 
-getCards();
-
-const renderingCards = (): void => {
-  for (let i = -14; i < 14; i++) {
-    const date = new Date();
-
-    date.setDate(date.getDate() + i);
-    dats.value.push(date.toISOString().slice(0, 11));
+const scrollMonthAgo = () => {
+  let date = new Date(dats.value[dats.value.length - 1]);
+  console.log(date);
+  date.setDate(date.getMonth() + 1);
+  for (let i = 0; i < 31; i++) {
+    date.setDate(date.getDate() - 1);
+    dats.value.unshift(date.toISOString());
+    if (
+      new Date(date.getDate() - 1).toISOString() ===
+      dats.value[dats.value.length - 1]
+    )
+      return;
   }
+  window.scroll({
+    left: 0,
+    top: 0,
+    behavior: "smooth",
+  });
 };
-renderingCards();
+
+// const intersectionObserver = new IntersectionObserver(
+//   () => {
+//     const date = ref(dats.value[dats.value.length - 1]);
+//     for (let i = 0; i < 31; i++) {
+//       date.value = date.value.setDate(date.value.getDate() + 1).toISOString();
+//       dats.value.push(date);
+//       if (date.value.setDate(date.value.getDate() + 1).slice(5, 7) === "01")
+//         return;
+//     }
+//   },
+//   {
+//     rootMargin: "0px 0px 200px 0px",
+//   }
+// );
+// console.log(document.querySelector(".day:last-child"));
+// intersectionObserver.observe(document.querySelector(".day:last-child"));
+
+const scrollToday = () => {
+  let indexArr = 0;
+  for (let i = 0; i < dats.value.length; i++) {
+    indexArr = dats.value.indexOf(new Date().toISOString().slice(0, 11)) + 1;
+  }
+  window.scroll({
+    left: 0,
+    top: (indexArr / 7) * 250,
+    behavior: "smooth",
+  });
+};
+
+const scrollMonthBefore = () => {
+  const date = ref(dats.value[dats.value.length - 1]);
+  for (let i = 0; i < 31; i++) {
+    date.value = date.value.setDate(date.value.getDate() + 1).toISOString();
+    dats.value.push(date);
+    if (date.value.setDate(date.value.getDate() + 1).slice(5, 7) === "01")
+      return;
+  }
+
+  let scrollHeight = document.documentElement.scrollHeight;
+  const clientHeight = document.documentElement.clientHeight;
+  scrollHeight = Math.max(scrollHeight, clientHeight);
+  window.scrollTo({
+    left: 0,
+    top: scrollHeight - document.documentElement.clientHeight,
+    behavior: "smooth",
+  });
+};
 
 const getFieldTasks = (date: string): Task[] => {
   return tasks.value.filter(
@@ -267,6 +365,7 @@ const getFieldTasks = (date: string): Task[] => {
 };
 
 const modalOpenRedact = (id) => {
+  idTodo.value = id;
   watch(modalValue, () =>
     redact(
       id,
@@ -280,6 +379,20 @@ const modalOpenRedact = (id) => {
   );
 };
 
+const priorityPush = (e) => {
+  priorityArr.value.push(e.target.innerHTML);
+};
+
+const showPopper = (name) => {
+  if (name === "priority") {
+    priorityShow.value = !priorityShow.value;
+  }
+};
+
+const deleteTask = (id) => {
+  deleteTodo(id).then(getCards);
+};
+
 const modalClose = () => {
   modalValue.value = false;
 };
@@ -289,6 +402,19 @@ const modalOpen = () => {
 </script>
 
 <style lang="scss">
+.popper__btm {
+  width: 240px;
+  height: 35px;
+  background-color: #fff;
+  border: none;
+  font-size: 16px;
+}
+.popper__btm:hover {
+  background-color: #eeeeee;
+  transition: 0.1s;
+}
+.popper {
+}
 .div {
   width: 100%;
   height: 1px;
@@ -590,6 +716,7 @@ const modalOpen = () => {
       }
 
       .string-text {
+        position: relative;
         color: #a2a2a2;
         font-size: 18px;
         padding-left: 8px;

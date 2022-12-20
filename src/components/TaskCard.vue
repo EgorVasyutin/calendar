@@ -1,5 +1,12 @@
 <template>
-  <div class="card">
+  <div
+    class="card"
+    draggable="true"
+    @dragstart="onDragStart"
+    @click.right.prevent="openAndClosePopper"
+    @dragenter.prevent
+    @dragover.prevent
+  >
     <div class="card_container">
       <div class="card-content">
         <div class="card-content__name">{{ task.title }}</div>
@@ -12,7 +19,7 @@
               type="checkbox"
               class="checkbox"
               :checked="task.isDone"
-              @click.stop="clickOnCheckbox"
+              @click.stop="clickOnCheckbox()"
             />
           </div>
           <div class="card-content__container--priority" v-if="true">
@@ -24,12 +31,24 @@
         </div>
       </div>
     </div>
+    <app-popper
+      class="popper"
+      :showPopper="showPopper"
+      @close="openAndClosePopper"
+      @click.stop
+      ><slot>
+        <button class="popper__btm" @click="deleteTodo">Delete</button>
+        <button class="popper__btm">Copy</button></slot
+      ></app-popper
+    >
   </div>
 </template>
 
 <script setup lang="ts">
+import AppPopper from "@/components/AppPopper.vue";
+import { ref } from "vue";
 // eslint-disable-next-line no-undef,no-unused-vars
-const emit = defineEmits(["clickOnCheckbox"]);
+const emit = defineEmits(["clickOnCheckbox", "delete-todo", "drop-task"]);
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
@@ -39,18 +58,64 @@ const props = defineProps({
   },
 });
 
+const showPopper = ref(false);
+
+const openAndClosePopper = () => {
+  showPopper.value = !showPopper.value;
+};
+
+const onDragStart = (e) => {
+  e.dataTransfer.dropEffect = "move";
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("taskId", props.task.id);
+};
+
+const deleteTodo = () => {
+  emit("delete-todo");
+};
+
 const clickOnCheckbox = () => {
   emit("clickOnCheckbox");
 };
 </script>
 
 <style scoped lang="scss">
+.popper__btm {
+  width: 240px;
+  height: 35px;
+  background-color: #fff;
+  border: none;
+  font-size: 16px;
+}
+.popper__btm:hover {
+  background-color: #eeeeee;
+  transition: 0.1s;
+}
+
+.popper {
+  top: 90px;
+  left: 110px;
+}
+.btm__delete {
+  margin-left: 150px;
+  margin-top: 50px;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid black;
+}
+
+.btm__delete:hover {
+  box-shadow: 0px 0px 2px black;
+  transition: 0.1s;
+}
+
 .card {
-  position: absolute;
+  position: relative;
   padding: 3px 6px;
   width: 100%;
   height: 200px;
-  top: 50px;
 }
 .card_container:hover {
   background-color: #eeeeee;
