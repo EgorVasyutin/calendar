@@ -7,23 +7,11 @@
         <div class="content-menu__fn__container--field sort">Sort</div>
         <div class="content-menu__fn__container--field search"></div>
         <div class="content-menu__fn__container--field arrows">
-          <svg viewBox="0 0 13 3" class="dots">
-            <g>
-              <path d="M3,1.5A1.5,1.5,0,1,1,1.5,0,1.5,1.5,0,0,1,3,1.5Z"></path>
-              <path d="M8,1.5A1.5,1.5,0,1,1,6.5,0,1.5,1.5,0,0,1,8,1.5Z"></path>
-              <path
-                d="M13,1.5A1.5,1.5,0,1,1,11.5,0,1.5,1.5,0,0,1,13,1.5Z"
-              ></path>
-            </g>
-          </svg>
+          <img src="../assets/img/dots.svg" class="dots" />
         </div>
         <div class="new" @click="modalOpen">New</div>
         <div class="new__arrow" @click="modalOpen">
-          <svg viewBox="0 0 30 30" class="chevronDown">
-            <polygon
-              points="15,17.4 4.8,7 2,9.8 15,23 28,9.8 25.2,7 "
-            ></polygon>
-          </svg>
+          <img src="../assets/img/chevronDown.svg" class="chevronDown" />
         </div>
       </div>
     </div>
@@ -33,21 +21,18 @@
       </div>
       <div class="month-switch">
         <div class="month-switch__arrow-left">
-          <svg
+          <img
+            src="../assets/img/arrow-left.svg"
             @click="scrollMonthAgo"
-            viewBox="0 0 30 30"
             class="month-switch__arrow-left--svg"
-          >
-            <polygon
-              points="12.6 15 23 25.2 20.2 28 7 15 20.2 2 23 4.8"
-            ></polygon>
-          </svg>
+          />
         </div>
         <div class="month-switch__text" @click="scrollToday">Today</div>
         <div @click="scrollMonthBefore" class="month-switch__arrow-right">
-          <svg viewBox="0 0 30 30" class="month-switch__arrow-left--svg">
-            <polygon points="17.4,15 7,25.2 9.8,28 23,15 9.8,2 7,4.8"></polygon>
-          </svg>
+          <img
+            src="../assets/img/arrow-right.svg"
+            class="month-switch__arrow-left--svg"
+          />
         </div>
       </div>
     </div>
@@ -80,130 +65,11 @@
     </div>
   </div>
   <modal-window :modal-open="modalValue" @modal-close="modalClose">
-    <slot>
-      <div class="modal-content__title">
-        <input
-          class="modal-content__input"
-          placeholder="Untitled"
-          v-model="title"
-        />
-      </div>
-      <div class="modal-content__table">
-        <div class="modal-content__table--string">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="typesDate">
-              <path
-                d="M3.29688 14.4561H12.7031C14.1797 14.4561 14.9453 13.6904 14.9453 12.2344V3.91504C14.9453 2.45215 14.1797 1.69336 12.7031 1.69336H3.29688C1.82031 1.69336 1.05469 2.45215 1.05469 3.91504V12.2344C1.05469 13.6973 1.82031 14.4561 3.29688 14.4561ZM3.27637 13.1162C2.70898 13.1162 2.39453 12.8154 2.39453 12.2207V5.9043C2.39453 5.30273 2.70898 5.00879 3.27637 5.00879H12.71C13.2842 5.00879 13.6055 5.30273 13.6055 5.9043V12.2207C13.6055 12.8154 13.2842 13.1162 12.71 13.1162H3.27637ZM6.68066 7.38086H7.08398C7.33008 7.38086 7.41211 7.30566 7.41211 7.05957V6.66309C7.41211 6.41699 7.33008 6.3418 7.08398 6.3418H6.68066C6.44141 6.3418 6.35938 6.41699 6.35938 6.66309V7.05957C6.35938 7.30566 6.44141 7.38086 6.68066 7.38086ZM8.92285 7.38086H9.31934C9.56543 7.38086 9.64746 7.30566 9.64746 7.05957V6.66309C9.64746 6.41699 9.56543 6.3418 9.31934 6.3418H8.92285C8.67676 6.3418 8.59473 6.41699 8.59473 6.66309V7.05957C8.59473 7.30566 8.67676 7.38086 8.92285 7.38086ZM11.1582 7.38086H11.5547C11.8008 7.38086 11.8828 7.30566 11.8828 7.05957V6.66309C11.8828 6.41699 11.8008 6.3418 11.5547 6.3418H11.1582C10.9121 6.3418 10.8301 6.41699 10.8301 6.66309V7.05957C10.8301 7.30566 10.9121 7.38086 11.1582 7.38086ZM4.44531 9.58203H4.84863C5.09473 9.58203 5.17676 9.50684 5.17676 9.26074V8.86426C5.17676 8.61816 5.09473 8.54297 4.84863 8.54297H4.44531C4.20605 8.54297 4.12402 8.61816 4.12402 8.86426V9.26074C4.12402 9.50684 4.20605 9.58203 4.44531 9.58203ZM6.68066 9.58203H7.08398C7.33008 9.58203 7.41211 9.50684 7.41211 9.26074V8.86426C7.41211 8.61816 7.33008 8.54297 7.08398 8.54297H6.68066C6.44141 8.54297 6.35938 8.61816 6.35938 8.86426V9.26074C6.35938 9.50684 6.44141 9.58203 6.68066 9.58203ZM8.92285 9.58203H9.31934C9.56543 9.58203 9.64746 9.50684 9.64746 9.26074V8.86426C9.64746 8.61816 9.56543 8.54297 9.31934 8.54297H8.92285C8.67676 8.54297 8.59473 8.61816 8.59473 8.86426V9.26074C8.59473 9.50684 8.67676 9.58203 8.92285 9.58203ZM11.1582 9.58203H11.5547C11.8008 9.58203 11.8828 9.50684 11.8828 9.26074V8.86426C11.8828 8.61816 11.8008 8.54297 11.5547 8.54297H11.1582C10.9121 8.54297 10.8301 8.61816 10.8301 8.86426V9.26074C10.8301 9.50684 10.9121 9.58203 11.1582 9.58203ZM4.44531 11.7832H4.84863C5.09473 11.7832 5.17676 11.708 5.17676 11.4619V11.0654C5.17676 10.8193 5.09473 10.7441 4.84863 10.7441H4.44531C4.20605 10.7441 4.12402 10.8193 4.12402 11.0654V11.4619C4.12402 11.708 4.20605 11.7832 4.44531 11.7832ZM6.68066 11.7832H7.08398C7.33008 11.7832 7.41211 11.708 7.41211 11.4619V11.0654C7.41211 10.8193 7.33008 10.7441 7.08398 10.7441H6.68066C6.44141 10.7441 6.35938 10.8193 6.35938 11.0654V11.4619C6.35938 11.708 6.44141 11.7832 6.68066 11.7832ZM8.92285 11.7832H9.31934C9.56543 11.7832 9.64746 11.708 9.64746 11.4619V11.0654C9.64746 10.8193 9.56543 10.7441 9.31934 10.7441H8.92285C8.67676 10.7441 8.59473 10.8193 8.59473 11.0654V11.4619C8.59473 11.708 8.67676 11.7832 8.92285 11.7832Z"
-              ></path>
-            </svg>
-            <div class="string-text">Data</div>
-          </div>
-          <div class="container--data">
-            <datepicker
-              range
-              lang="en"
-              type="date"
-              v-model="dateModel"
-              class="startData"
-              placeholder="Start data "
-            />
-          </div>
-        </div>
-        <div class="modal-content__table--string">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="typesDate">
-              <path
-                d="M3.29688 14.4561H12.7031C14.1797 14.4561 14.9453 13.6904 14.9453 12.2344V3.91504C14.9453 2.45215 14.1797 1.69336 12.7031 1.69336H3.29688C1.82031 1.69336 1.05469 2.45215 1.05469 3.91504V12.2344C1.05469 13.6973 1.82031 14.4561 3.29688 14.4561ZM3.27637 13.1162C2.70898 13.1162 2.39453 12.8154 2.39453 12.2207V5.9043C2.39453 5.30273 2.70898 5.00879 3.27637 5.00879H12.71C13.2842 5.00879 13.6055 5.30273 13.6055 5.9043V12.2207C13.6055 12.8154 13.2842 13.1162 12.71 13.1162H3.27637ZM6.68066 7.38086H7.08398C7.33008 7.38086 7.41211 7.30566 7.41211 7.05957V6.66309C7.41211 6.41699 7.33008 6.3418 7.08398 6.3418H6.68066C6.44141 6.3418 6.35938 6.41699 6.35938 6.66309V7.05957C6.35938 7.30566 6.44141 7.38086 6.68066 7.38086ZM8.92285 7.38086H9.31934C9.56543 7.38086 9.64746 7.30566 9.64746 7.05957V6.66309C9.64746 6.41699 9.56543 6.3418 9.31934 6.3418H8.92285C8.67676 6.3418 8.59473 6.41699 8.59473 6.66309V7.05957C8.59473 7.30566 8.67676 7.38086 8.92285 7.38086ZM11.1582 7.38086H11.5547C11.8008 7.38086 11.8828 7.30566 11.8828 7.05957V6.66309C11.8828 6.41699 11.8008 6.3418 11.5547 6.3418H11.1582C10.9121 6.3418 10.8301 6.41699 10.8301 6.66309V7.05957C10.8301 7.30566 10.9121 7.38086 11.1582 7.38086ZM4.44531 9.58203H4.84863C5.09473 9.58203 5.17676 9.50684 5.17676 9.26074V8.86426C5.17676 8.61816 5.09473 8.54297 4.84863 8.54297H4.44531C4.20605 8.54297 4.12402 8.61816 4.12402 8.86426V9.26074C4.12402 9.50684 4.20605 9.58203 4.44531 9.58203ZM6.68066 9.58203H7.08398C7.33008 9.58203 7.41211 9.50684 7.41211 9.26074V8.86426C7.41211 8.61816 7.33008 8.54297 7.08398 8.54297H6.68066C6.44141 8.54297 6.35938 8.61816 6.35938 8.86426V9.26074C6.35938 9.50684 6.44141 9.58203 6.68066 9.58203ZM8.92285 9.58203H9.31934C9.56543 9.58203 9.64746 9.50684 9.64746 9.26074V8.86426C9.64746 8.61816 9.56543 8.54297 9.31934 8.54297H8.92285C8.67676 8.54297 8.59473 8.61816 8.59473 8.86426V9.26074C8.59473 9.50684 8.67676 9.58203 8.92285 9.58203ZM11.1582 9.58203H11.5547C11.8008 9.58203 11.8828 9.50684 11.8828 9.26074V8.86426C11.8828 8.61816 11.8008 8.54297 11.5547 8.54297H11.1582C10.9121 8.54297 10.8301 8.61816 10.8301 8.86426V9.26074C10.8301 9.50684 10.9121 9.58203 11.1582 9.58203ZM4.44531 11.7832H4.84863C5.09473 11.7832 5.17676 11.708 5.17676 11.4619V11.0654C5.17676 10.8193 5.09473 10.7441 4.84863 10.7441H4.44531C4.20605 10.7441 4.12402 10.8193 4.12402 11.0654V11.4619C4.12402 11.708 4.20605 11.7832 4.44531 11.7832ZM6.68066 11.7832H7.08398C7.33008 11.7832 7.41211 11.708 7.41211 11.4619V11.0654C7.41211 10.8193 7.33008 10.7441 7.08398 10.7441H6.68066C6.44141 10.7441 6.35938 10.8193 6.35938 11.0654V11.4619C6.35938 11.708 6.44141 11.7832 6.68066 11.7832ZM8.92285 11.7832H9.31934C9.56543 11.7832 9.64746 11.708 9.64746 11.4619V11.0654C9.64746 10.8193 9.56543 10.7441 9.31934 10.7441H8.92285C8.67676 10.7441 8.59473 10.8193 8.59473 11.0654V11.4619C8.59473 11.708 8.67676 11.7832 8.92285 11.7832Z"
-              ></path>
-            </svg>
-            <div class="string-text">Data Created</div>
-          </div>
-          <div class="string-right string-text-2">13:10 -> 2:13</div>
-        </div>
-        <div class="modal-content__table--string">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="typesCheckbox">
-              <path
-                d="M3.85742 14.4561H12.1357C13.6123 14.4561 14.3779 13.6904 14.3779 12.2344V3.91504C14.3779 2.45215 13.6123 1.69336 12.1357 1.69336H3.85742C2.38086 1.69336 1.61523 2.45215 1.61523 3.91504V12.2344C1.61523 13.6973 2.38086 14.4561 3.85742 14.4561ZM3.93945 13.1162C3.30371 13.1162 2.95508 12.7812 2.95508 12.1182V4.02441C2.95508 3.36133 3.30371 3.0332 3.93945 3.0332H12.0537C12.6826 3.0332 13.0381 3.36133 13.0381 4.02441V12.1182C13.0381 12.7812 12.6826 13.1162 12.0537 13.1162H3.93945ZM7.26855 11.3115C7.51465 11.3115 7.72656 11.1885 7.87012 10.9697L10.9258 6.19141C11.0146 6.04785 11.0967 5.88379 11.0967 5.72656C11.0967 5.3916 10.7959 5.16602 10.4746 5.16602C10.2695 5.16602 10.085 5.27539 9.94141 5.50781L7.24121 9.8418L5.96973 8.22168C5.80566 8.00977 5.6416 7.93457 5.43652 7.93457C5.10156 7.93457 4.8418 8.20117 4.8418 8.54297C4.8418 8.70703 4.90332 8.85742 5.01953 9.00098L6.63281 10.9697C6.81738 11.209 7.01562 11.3115 7.26855 11.3115Z"
-              ></path>
-            </svg>
-            <div class="string-text">Готово</div>
-          </div>
-          <div class="string-right string-text">
-            <input
-              type="checkbox"
-              class="checkbox"
-              :checked="isDone"
-              @click="clickOnCheckbox"
-            />
-          </div>
-        </div>
-        <div class="modal-content__table--string">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="typesSelect">
-              <path
-                d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM7.62402 10.6348C7.79492 10.915 8.20508 10.9287 8.37598 10.6348L10.666 6.73145C10.8574 6.41016 10.7002 6.04102 10.3652 6.04102H5.62793C5.29297 6.04102 5.14941 6.43066 5.32031 6.73145L7.62402 10.6348Z"
-              ></path>
-            </svg>
-            <div class="string-text">Приоритет</div>
-            <app-popper
-              class="popper"
-              @click="showPopper('priority')"
-              :showPopper="priorityShow"
-            >
-              <button class="popper__btm" @click="priorityPush">1</button>
-              <button class="popper__btm" @click="priorityPush">2</button>
-              <button class="popper__btm" @click="priorityPush">3</button>
-            </app-popper>
-          </div>
-          <div
-            class="green string-text-2 string-right"
-            v-for="priority in priorityArr"
-            :key="priority"
-          >
-            {{ priority }}
-          </div>
-        </div>
-        <div class="modal-content__table--string">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="typesSelect">
-              <path
-                d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM7.62402 10.6348C7.79492 10.915 8.20508 10.9287 8.37598 10.6348L10.666 6.73145C10.8574 6.41016 10.7002 6.04102 10.3652 6.04102H5.62793C5.29297 6.04102 5.14941 6.43066 5.32031 6.73145L7.62402 10.6348Z"
-              ></path>
-            </svg>
-            <div class="string-text">Статус</div>
-          </div>
-          <div class="string-right string-text-2">Разработка</div>
-        </div>
-        <div class="modal-content__table--string">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="typesMultipleSelect">
-              <path
-                d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"
-              ></path>
-            </svg>
-            <div class="string-text">Тип</div>
-          </div>
-          <div class="string-right string-text-2">{{ type }}</div>
-        </div>
-        <div class="modal-content__table--string add-property">
-          <div class="string-left">
-            <svg viewBox="0 0 16 16" class="plus">
-              <path
-                d="M7.977 14.963c.407 0 .747-.324.747-.723V8.72h5.362c.399 0 .74-.34.74-.747a.746.746 0 00-.74-.738H8.724V1.706c0-.398-.34-.722-.747-.722a.732.732 0 00-.739.722v5.529h-5.37a.746.746 0 00-.74.738c0 .407.341.747.74.747h5.37v5.52c0 .399.332.723.739.723z"
-              ></path>
-            </svg>
-            <div class="string-text">Add property</div>
-          </div>
-        </div>
-        <div class="div"></div>
-        <div class="comments__div">
-          <div class="comments"></div>
-          <input class="comments__input" placeholder="Add a comment..." />
-          <div class="comment__div--line"></div>
-        </div>
-      </div>
-    </slot>
+    <task-form
+      @clickOnCheckbox="clickOnCheckbox(idTodo)"
+      :isDoneProps="isDone"
+      @modal-data="editingModalFields"
+    />
   </modal-window>
 </template>
 
@@ -215,8 +81,8 @@ import "@vuepic/vue-datepicker/dist/main.css";
 
 import modalWindow from "@/components/ModalWindow.vue";
 import { Task } from "@/types";
-import Datepicker from "@vuepic/vue-datepicker";
-import AppPopper from "@/components/AppPopper.vue";
+// import Datepicker from "@vuepic/vue-datepicker";
+import TaskForm from "@/components/TaskForm.vue";
 
 const { tasks, getCards, newCard, redact, deleteTodo, patch } = useTasks();
 
@@ -225,12 +91,8 @@ const title = ref<string>("");
 const isDone = ref<boolean>(false);
 const type = ref<string>("sss5");
 const priority = ref<string>("normal");
-const dateModel = ref<string[]>([]);
 const startDate = ref<string>(new Date().toISOString());
 const endDate = ref<string>(new Date().toISOString());
-const priorityArr = ref([]);
-
-const priorityShow = ref(false);
 
 const idTodo = ref("");
 
@@ -238,6 +100,23 @@ const dats = ref([]);
 const fullDates = ref<string[]>([]);
 
 let modalValue = ref(false);
+
+const editingModalFields = (
+  newTitle,
+  newIsDone,
+  newType,
+  newPriority,
+  newStartDate,
+  newEndDate
+) => {
+  console.log(1);
+  title.value = newTitle;
+  isDone.value = newIsDone;
+  type.value = newType;
+  priority.value = newPriority;
+  startDate.value = newStartDate;
+  endDate.value = newEndDate;
+};
 
 const renderingCards = (): void => {
   for (let i = -14; i < 14; i++) {
@@ -257,13 +136,6 @@ const clickOnCheckbox = async (id) => {
     if (task.id === id) isDone.value = !task.isDone;
   });
 };
-
-watch(dateModel, () => {
-  if (dateModel.value.length) {
-    startDate.value = dateModel.value[0].toISOString();
-    endDate.value = dateModel.value[1].toISOString();
-  }
-});
 
 const createCard = () => {
   //без watch-а
@@ -297,11 +169,29 @@ const scrollMonthAgo = () => {
     date.setDate(date.getDate() - 1);
     dats.value.unshift(date.toISOString());
     if (
-      new Date(date.getDate() - 1).toISOString() ===
-      dats.value[dats.value.length - 1]
-    )
+      new Date(date.getDate() - 1).toISOString().slice(8, 11) ===
+      dats.value[dats.value.length - 1].slice(8, 11)
+    ) {
       return;
+    }
   }
+
+  scrollUp();
+};
+
+window.addEventListener("scroll", () => {
+  const height = document.body.offsetHeight;
+  const screenHeight = window.innerHeight;
+  const scrolled = window.scrollY;
+  const threshold = height - (screenHeight - 300);
+  const position = scrolled + screenHeight;
+
+  if (position >= threshold) {
+    addMonthBefore();
+  }
+});
+
+const scrollUp = () => {
   window.scroll({
     left: 0,
     top: 0,
@@ -309,52 +199,49 @@ const scrollMonthAgo = () => {
   });
 };
 
-// const intersectionObserver = new IntersectionObserver(
-//   () => {
-//     const date = ref(dats.value[dats.value.length - 1]);
-//     for (let i = 0; i < 31; i++) {
-//       date.value = date.value.setDate(date.value.getDate() + 1).toISOString();
-//       dats.value.push(date);
-//       if (date.value.setDate(date.value.getDate() + 1).slice(5, 7) === "01")
-//         return;
-//     }
-//   },
-//   {
-//     rootMargin: "0px 0px 200px 0px",
-//   }
-// );
-// console.log(document.querySelector(".day:last-child"));
-// intersectionObserver.observe(document.querySelector(".day:last-child"));
-
 const scrollToday = () => {
-  let indexArr = 0;
-  for (let i = 0; i < dats.value.length; i++) {
-    indexArr = dats.value.indexOf(new Date().toISOString().slice(0, 11)) + 1;
-  }
+  // const dateNow = ref("");
+  // dats.value.forEach((date) => {
+  //   if (date.slice(0, 12) === new Date().toISOString().slice(0, 12))
+  //     dateNow.value = date;
+  // });
+  // const index = dats.value.findIndex((e) => e === dateNow.value);
+  // console.log(index);
+
   window.scroll({
     left: 0,
-    top: (indexArr / 7) * 250,
+    top: (14 * 250) / 7 + 250,
     behavior: "smooth",
   });
 };
 
-const scrollMonthBefore = () => {
-  const date = ref(dats.value[dats.value.length - 1]);
-  for (let i = 0; i < 31; i++) {
-    date.value = date.value.setDate(date.value.getDate() + 1).toISOString();
-    dats.value.push(date);
-    if (date.value.setDate(date.value.getDate() + 1).slice(5, 7) === "01")
-      return;
-  }
-
-  let scrollHeight = document.documentElement.scrollHeight;
-  const clientHeight = document.documentElement.clientHeight;
-  scrollHeight = Math.max(scrollHeight, clientHeight);
-  window.scrollTo({
+const scrollDown = () => {
+  window.scroll({
     left: 0,
-    top: scrollHeight - document.documentElement.clientHeight,
+    top: (dats.value.length * 250) / 7 + 250,
     behavior: "smooth",
   });
+};
+
+const addMonthBefore = () => {
+  let date = new Date(dats.value[dats.value.length - 1]);
+  console.log(date);
+  date.setDate(date.getMonth() + 1);
+  for (let i = 0; i < 31; i++) {
+    date.setDate(date.getDate() + 1);
+    dats.value.push(date.toISOString());
+    if (
+      new Date(date.getDate() - 1).toISOString() ===
+      dats.value[dats.value.length - 1]
+    ) {
+      return;
+    }
+  }
+};
+
+const scrollMonthBefore = () => {
+  addMonthBefore();
+  setTimeout(() => scrollDown(), 50);
 };
 
 const getFieldTasks = (date: string): Task[] => {
@@ -377,16 +264,6 @@ const modalOpenRedact = (id) => {
       endDate.value
     ).then(getCards)
   );
-};
-
-const priorityPush = (e) => {
-  priorityArr.value.push(e.target.innerHTML);
-};
-
-const showPopper = (name) => {
-  if (name === "priority") {
-    priorityShow.value = !priorityShow.value;
-  }
 };
 
 const deleteTask = (id) => {

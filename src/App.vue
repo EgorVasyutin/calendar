@@ -1,4 +1,5 @@
 <template>
+  <app-header></app-header>
   <div>
     <router-link to="/authorization">authorization</router-link>
     <router-link to="/login">login</router-link>
@@ -15,6 +16,11 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
+<script>
+import AppHeader from "@/components/AppHeader";
+export default {
+  components: { AppHeader },
+};
+</script>
