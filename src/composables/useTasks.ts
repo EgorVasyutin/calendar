@@ -15,41 +15,30 @@ const useTasks = () => {
     }
   };
 
-  const newCard = async (title, isDone, priority, type, startDate, endDate) => {
-    await axiosInstance.post("todos", {
-      title,
-      isDone,
-      priority,
-      type,
-      startDate,
-      endDate,
-    });
+  const getOneCard = async (id) => {
+    try {
+      const card = await axiosInstance.get(`todos/${id}`);
+      console.log("card", card.data[0]);
+
+      return card.data[0];
+    } catch (e) {
+      console.error("Ошибка при запросе задач");
+    }
   };
 
-  const redact = async (
-    id,
-    title,
-    isDone,
-    priority,
-    type,
-    startDate,
-    endDate
-  ) => {
-    await axiosInstance.put(`todos/${id}`, {
-      title,
-      isDone,
-      priority,
-      type,
-      startDate,
-      endDate,
-    });
+  const newCard = async (task: object) => {
+    await axiosInstance.post("todos", task);
+  };
+
+  const redact = async (id, task: object) => {
+    await axiosInstance.put(`todos/${id}`, task);
   };
 
   const deleteTodo = async (id) => {
     await axiosInstance.delete(`todos/${id}`);
   };
 
-  const patch = async (id, value) => {
+  const patch = async (id, value: object) => {
     await axiosInstance.patch(`todos/${id}`, value);
   };
 
@@ -60,6 +49,7 @@ const useTasks = () => {
     redact,
     deleteTodo,
     patch,
+    getOneCard,
   };
 };
 

@@ -64,11 +64,17 @@
       </div>
     </div>
   </div>
-  <modal-window :modal-open="modalValue" @modal-close="modalClose">
+  <modal-window
+    :modal-open="modalValue"
+    @modal-close="modalClose"
+    @on-copy="onCopy"
+  >
     <task-form
+      :created="false"
+      :taskId="idTodo"
       @clickOnCheckbox="clickOnCheckbox(idTodo)"
-      :isDoneProps="isDone"
-      @modal-data="editingModalFields"
+      :isDoneProps="task.isDone"
+      @update-task="updateTask"
     />
   </modal-window>
 </template>
@@ -84,39 +90,41 @@ import { Task } from "@/types";
 // import Datepicker from "@vuepic/vue-datepicker";
 import TaskForm from "@/components/TaskForm.vue";
 
-const { tasks, getCards, newCard, redact, deleteTodo, patch } = useTasks();
-
-// eslint-disable-next-line no-unused-vars
-const title = ref<string>("");
-const isDone = ref<boolean>(false);
-const type = ref<string>("sss5");
-const priority = ref<string>("normal");
-const startDate = ref<string>(new Date().toISOString());
-const endDate = ref<string>(new Date().toISOString());
+const { tasks, getCards, deleteTodo, patch, getOneCard, newCard } = useTasks();
 
 const idTodo = ref("");
+
+const task = ref({
+  title: "",
+  isDone: false,
+  type: "",
+  status: "",
+  priority: "",
+  startDate: new Date().toISOString(),
+  endDate: new Date().toISOString(),
+});
 
 const dats = ref([]);
 const fullDates = ref<string[]>([]);
 
 let modalValue = ref(false);
 
-const editingModalFields = (
-  newTitle,
-  newIsDone,
-  newType,
-  newPriority,
-  newStartDate,
-  newEndDate
-) => {
-  console.log(1);
-  title.value = newTitle;
-  isDone.value = newIsDone;
-  type.value = newType;
-  priority.value = newPriority;
-  startDate.value = newStartDate;
-  endDate.value = newEndDate;
-};
+// const editingModalFields = (
+//   newTitle,
+//   newIsDone,
+//   newType,
+//   newPriority,
+//   newStartDate,
+//   newEndDate
+// ) => {
+//   console.log(1);
+//   title.value = newTitle;
+//   isDone.value = newIsDone;
+//   type.value = newType;
+//   priority.value = newPriority;
+//   startDate.value = newStartDate;
+//   endDate.value = newEndDate;
+// };
 
 const renderingCards = (): void => {
   for (let i = -14; i < 14; i++) {
@@ -132,23 +140,22 @@ renderingCards();
 getCards();
 
 const clickOnCheckbox = async (id) => {
-  await tasks.value.forEach((task) => {
-    if (task.id === id) isDone.value = !task.isDone;
+  await tasks.value.forEach((Task) => {
+    if (Task.id === id) task.value.isDone = !Task.isDone;
   });
 };
 
+// const createCard = false;
+
 const createCard = () => {
   //без watch-а
-  watch(modalValue, () => {
-    newCard(
-      title.value,
-      isDone.value,
-      priority.value,
-      type.value,
-      startDate.value,
-      endDate.value
-    ).then(getCards);
+  watch(modalValue, async () => {
+    await newCard(task.value).then(await getCards);
   });
+};
+
+const modalOpenRedact = (id) => {
+  idTodo.value = id;
 };
 
 const changeTaskStartDate = (id, date) => {
@@ -156,9 +163,19 @@ const changeTaskStartDate = (id, date) => {
   patch(id, { endDate: date }).then(getCards);
 };
 
-const changeCheckbox = (id) => {
-  clickOnCheckbox(id);
-  patch(id, { isDone: isDone.value }).then(getCards);
+const changeCheckbox = async (id) => {
+  await clickOnCheckbox(id);
+  patch(id, { isDone: task.value.isDone }).then(await getCards);
+};
+
+const onCopy = async () => {
+  const copyTask = await getOneCard(idTodo.value);
+  console.log(copyTask);
+  newCard(copyTask).then(await getCards);
+};
+
+const updateTask = async () => {
+  await getCards();
 };
 
 const scrollMonthAgo = () => {
@@ -200,14 +217,6 @@ const scrollUp = () => {
 };
 
 const scrollToday = () => {
-  // const dateNow = ref("");
-  // dats.value.forEach((date) => {
-  //   if (date.slice(0, 12) === new Date().toISOString().slice(0, 12))
-  //     dateNow.value = date;
-  // });
-  // const index = dats.value.findIndex((e) => e === dateNow.value);
-  // console.log(index);
-
   window.scroll({
     left: 0,
     top: (14 * 250) / 7 + 250,
@@ -248,21 +257,6 @@ const getFieldTasks = (date: string): Task[] => {
   return tasks.value.filter(
     (task) =>
       task.startDate.slice(0, 11) <= date && date <= task.endDate.slice(0, 11)
-  );
-};
-
-const modalOpenRedact = (id) => {
-  idTodo.value = id;
-  watch(modalValue, () =>
-    redact(
-      id,
-      title.value,
-      isDone.value,
-      priority.value,
-      type.value,
-      startDate.value,
-      endDate.value
-    ).then(getCards)
   );
 };
 

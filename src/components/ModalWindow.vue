@@ -9,7 +9,7 @@ const props = defineProps({
   },
 });
 // eslint-disable-next-line no-undef,no-unused-vars
-const emit = defineEmits(["modal-close", "delete-todo-modal"]);
+const emit = defineEmits(["modal-close", "delete-todo-modal", "on-copy"]);
 
 const closeModal = () => {
   emit("modal-close");
@@ -28,7 +28,7 @@ const openAndClosePopper = () => {
 };
 
 const onCopy = () => {
-  console.log("onCopy");
+  emit("on-copy");
   openAndClosePopper();
 };
 </script>

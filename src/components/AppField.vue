@@ -24,6 +24,7 @@
       <div class="day__container--num">{{ date.slice(8, 10) }}</div>
     </div>
     <task-card
+      @mouseover="Resizable($event.target)"
       v-for="task in tasks"
       :key="task.id"
       @click.stop="modalOpenRedact(task.id)"
@@ -35,7 +36,6 @@
     ></task-card>
   </div>
 </template>
-
 <script setup lang="ts">
 import taskCard from "@/components/TaskCard.vue";
 import { ref } from "vue";
@@ -62,6 +62,81 @@ const props = defineProps({
     default: "",
   },
 });
+
+function direction(elem, event, maxPad) {
+  let res = 8;
+  const pad = maxPad || 4;
+  const pos = elem.getBoundingClientRect();
+  const top = pos.top;
+  const left = pos.left;
+  const width = elem.clientWidth;
+  const height = elem.clientHeight;
+  const eTop = event.clientY;
+  const eLeft = event.clientX;
+  const isTop = eTop - top < pad;
+  const isRight = left + width - eLeft < pad;
+  const isBottom = top + height - eTop < pad;
+  const isLeft = eLeft - left < pad;
+  if (isTop) res = 0;
+  if (isRight) res = 1;
+  if (isBottom) res = 2;
+  if (isLeft) res = 3;
+
+  return res;
+}
+const cursors = "n w s e ne se sw nw".split(" ");
+
+function Resizable(elem, options) {
+  options = options || {};
+  options.max = options.max || [1000, 1000];
+  options.min = options.min || [10, 10];
+  options.allow = (options.allow || "11111111").split("");
+
+  elem.addEventListener("mousemove", function (e) {
+    let dir = direction(this, e);
+    if (options.allow[dir] === "0") return;
+    this.style.cursor = dir === 8 ? "default" : cursors[dir] + "-resize";
+  });
+
+  elem.addEventListener("mousedown", resizeStart);
+  document.body.onselectstart = function () {
+    return false;
+  };
+
+  elem.min = options.min;
+  elem.max = options.max;
+  elem.allow = options.allow;
+  elem.pos = elem.getBoundingClientRect();
+
+  function resizeStart(ev) {
+    const dir = direction(this, ev);
+    if (this.allow[dir] == "0") return;
+    document.documentElement.style.cursor = this.style.cursor =
+      cursors[dir] + "-resize";
+    const pos = this.getBoundingClientRect();
+    const elem = this;
+    const height = this.clientHeight;
+    document.addEventListener("mousemove", resize);
+    document.addEventListener("mouseup", function () {
+      document.removeEventListener("mousemove", resize);
+      document.documentElement.style.cursor = elem.style.cursor = "default";
+      document.body.onselectstart = null;
+    });
+
+    function resize(e) {
+      if (dir === 0) {
+        elem.style.top = e.clientY - ev.clientY + pos.top;
+        elem.style.height = height + ev.clientY - e.clientY;
+      }
+      if (dir === 1) {
+        elem.style.width = elem.style.width + "500px";
+      }
+      if (dir === 3) {
+        elem.style.width = elem.style.width + "500px";
+      }
+    }
+  }
+}
 
 const onDrop = (e) => {
   const taskId = parseInt(e.dataTransfer.getData("taskId"));

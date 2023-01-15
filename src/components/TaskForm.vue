@@ -3,7 +3,7 @@
     <input
       class="modal-content__input"
       placeholder="Untitled"
-      v-model="title"
+      v-model="task.title"
     />
   </div>
   <div class="modal-content__table">
@@ -75,7 +75,7 @@
         </app-popper>
       </div>
       <div class="green string-text-2 string-right priority">
-        {{ priority }}
+        {{ task.priority }}
       </div>
     </div>
     <div class="modal-content__table--string">
@@ -99,7 +99,7 @@
           </button>
         </app-popper>
       </div>
-      <div class="string-right string-text-2 status">Разработка</div>
+      <div class="string-right string-text-2 status">{{ task.status }}</div>
     </div>
     <div class="modal-content__table--string">
       <div class="string-left" @click="openAndClosePopper('type')">
@@ -122,7 +122,7 @@
           </button>
         </app-popper>
       </div>
-      <div class="string-right string-text-2 type">{{ type }}</div>
+      <div class="string-right string-text-2 type">{{ task.type }}</div>
     </div>
     <div class="modal-content__table--string add-property">
       <div class="string-left">
@@ -141,8 +141,13 @@
 
 <script setup lang="ts">
 import Datepicker from "@vuepic/vue-datepicker";
+import { debounce } from "throttle-debounce";
 import { ref, watch } from "vue";
 import AppPopper from "@/components/AppPopper";
+// import useTasks from "@/composables/useTasks";
+import useTasks from "@/composables/useTasks";
+
+const { redact } = useTasks();
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
@@ -150,21 +155,52 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  created: {
+    type: Boolean,
+    default: false,
+  },
+  taskId: {
+    type: String,
+    required: true,
+  },
 });
 
+// const refProps = toRefs(props);
+
 // eslint-disable-next-line no-undef
-const emits = defineEmits(["modal-data"]);
+const emits = defineEmits(["modal-data", "task", "update-task"]);
 
 const dateModel = ref("");
 
 // eslint-disable-next-line no-unused-vars,no-undef
-const title = ref<string>("");
+const task = ref({
+  title: "",
+  isDone: false,
+  type: "",
+  status: "",
+  priority: "",
+  startDate: new Date().toISOString(),
+  endDate: new Date().toISOString(),
+});
+
+const updateTask = async () => {
+  // emits("task", task.value);
+  await redact(props.taskId, task.value);
+  emits("update-task");
+};
+
+const debounceUpdateTask = debounce(300, updateTask);
+
+watch(
+  task,
+  () => {
+    console.log(123);
+    debounceUpdateTask();
+  },
+  { deep: true }
+);
 // eslint-disable-next-line no-unused-vars
-const isDone = ref<boolean>(false);
-const type = ref<string>("sss5");
-const priority = ref<string>("normal");
-const startDate = ref<string>(new Date().toISOString());
-const endDate = ref<string>(new Date().toISOString());
+let modalValue = ref(false);
 
 const showPopperPriority = ref(false);
 
@@ -178,36 +214,37 @@ const openAndClosePopper = (name) => {
   if (name === "type") showPopperType.value = !showPopperType.value;
 };
 
+const clickOnTag = (name, e) => {
+  if (name === "priority") {
+    document.querySelector(".priority").innerHTML = e.target.innerHTML;
+    // if (refProps.created.value !== true) task.value.priority = e.target.innerHTML;
+    task.value.priority = e.target.innerHTML;
+  }
+
+  if (name === "status") {
+    document.querySelector(".status").innerHTML = e.target.innerHTML;
+    // if (refProps.created.value !== true) task.value.status = e.target.innerHTML;
+    task.value.status = e.target.innerHTML;
+  }
+
+  if (name === "type") {
+    document.querySelector(".type").innerHTML = e.target.innerHTML;
+    // if (refProps.created.value !== true) task.value.type = e.target.innerHTML;
+    task.value.type = e.target.innerHTML;
+  }
+};
+
 watch(dateModel, () => {
   if (dateModel.value.length) {
-    startDate.value = dateModel.value[0].toISOString();
-    endDate.value = dateModel.value[1].toISOString();
+    task.value.startDate = dateModel.value[0].toISOString();
+    task.value.endDate = dateModel.value[1].toISOString();
   }
 });
 
-document
-  .querySelector(".modal-overlay")
-  .addEventListener("click", async function () {
-    console.log(1);
-    await emits(
-      "modal-data",
-      title.value,
-      isDone.value,
-      type.value,
-      priority.value,
-      startDate.value,
-      endDate.value
-    );
-  });
-
-const clickOnTag = (name, e) => {
-  if (name === "priority")
-    document.querySelector(".priority").innerHTML = e.target.innerHTML;
-  if (name === "status")
-    document.querySelector(".status").innerHTML = e.target.innerHTML;
-  if (name === "type")
-    document.querySelector(".type").innerHTML = e.target.innerHTML;
-};
+// watch(refProps.created.value, () => {
+//   console.log(1);
+//   if (refProps.created.value === true) newCard(task.value).then(getCards);
+// });
 </script>
 
 <style scoped lang="scss">

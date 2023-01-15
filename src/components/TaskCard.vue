@@ -11,9 +11,6 @@
       <div class="card-content">
         <div class="card-content__name">{{ task.title }}</div>
         <div class="card-content__container">
-          <div class="card-content__container--status">
-            <div class="status">asd</div>
-          </div>
           <div class="card-content__container--checkbox">
             <input
               type="checkbox"
@@ -22,11 +19,14 @@
               @click.stop="clickOnCheckbox()"
             />
           </div>
-          <div class="card-content__container--priority" v-if="true">
-            <div class="priority">asd</div>
+          <div class="card-content__container--status" v-if="task.status">
+            <div class="status">{{ task.status }}</div>
           </div>
-          <div class="card-content__container--type" v-if="true">
-            <div class="type">asd</div>
+          <div class="card-content__container--priority" v-if="task.priority">
+            <div class="priority">{{ task.priority }}</div>
+          </div>
+          <div class="card-content__container--type" v-if="task.type">
+            <div class="type">{{ task.type }}</div>
           </div>
         </div>
       </div>
@@ -57,6 +57,7 @@ const props = defineProps({
     required: true,
   },
 });
+console.log(props.task);
 
 const showPopper = ref(false);
 
@@ -162,6 +163,7 @@ const clickOnCheckbox = () => {
     width: 100%;
 
     &--status {
+      margin-top: 5px;
       display: flex;
       align-items: center;
       font-size: 12px;
