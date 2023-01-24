@@ -9,7 +9,7 @@
   <div class="modal-content__table">
     <div class="modal-content__table--string">
       <div class="string-left">
-        <img src="../assets/img/date.svg" />
+        <img src="../assets/img/date.svg" class="string-left__icon" />
         <div class="string-text">Data</div>
       </div>
       <div class="container--data">
@@ -25,14 +25,14 @@
     </div>
     <div class="modal-content__table--string">
       <div class="string-left">
-        <img src="../assets/img/date.svg" />
+        <img src="../assets/img/date.svg" class="string-left__icon" />
         <div class="string-text">Data Created</div>
       </div>
       <div class="string-right string-text-2">13:10 -> 2:13</div>
     </div>
     <div class="modal-content__table--string">
       <div class="string-left">
-        <img src="../assets/img/checkbox.svg" />
+        <img src="../assets/img/checkbox.svg" class="string-left__icon" />
         <div class="string-text">Готово</div>
       </div>
       <div class="string-right string-text">
@@ -46,7 +46,7 @@
     </div>
     <div class="modal-content__table--string">
       <div class="string-left" @click="openAndClosePopper('priority')">
-        <img src="../assets/img/play.svg" />
+        <img src="../assets/img/play.svg" class="string-left__icon" />
         <div class="string-text">Приоритет</div>
         <app-popper
           class="popper"
@@ -80,7 +80,7 @@
     </div>
     <div class="modal-content__table--string">
       <div class="string-left" @click="openAndClosePopper('status')">
-        <img src="../assets/img/play.svg" />
+        <img src="../assets/img/play.svg" class="string-left__icon" />
         <div class="string-text">Статус</div>
         <app-popper
           class="popper"
@@ -103,7 +103,7 @@
     </div>
     <div class="modal-content__table--string">
       <div class="string-left" @click="openAndClosePopper('type')">
-        <img src="../assets/img/multiselect.svg" />
+        <img src="../assets/img/multiselect.svg" class="string-left__icon" />
         <div class="string-text">Тип</div>
         <app-popper
           class="popper"
@@ -126,7 +126,7 @@
     </div>
     <div class="modal-content__table--string add-property">
       <div class="string-left">
-        <img src="../assets/img/plus.svg" />
+        <img src="../assets/img/plus.svg" class="string-left__icon" />
         <div class="string-text">Add property</div>
       </div>
     </div>
@@ -263,5 +263,163 @@ watch(dateModel, () => {
 }
 .popper {
   margin-top: 130px;
+}
+
+@media screen and (max-width: 720px) {
+  .modal-content__title {
+    margin-bottom: 15px;
+    color: black;
+    max-width: 100%;
+    width: 75%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: rgb(55, 53, 47);
+    margin-left: 70px;
+    margin-top: 50px;
+  }
+  .modal-content__table {
+    margin-top: 5px;
+    padding-left: 70px;
+    padding-right: calc(126px + env(safe-area-inset-right));
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .modal-content__title {
+    margin-bottom: 15px;
+    color: black;
+    max-width: 100%;
+    width: 75%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: rgb(55, 53, 47);
+    margin-left: 40px;
+    margin-top: 50px;
+  }
+  .modal-content__table {
+    margin-top: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    max-width: 100%;
+    width: 100%;
+  }
+  .modal-content__input {
+    height: 40px;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .string-text {
+    font-size: 14px;
+  }
+
+  .string-text-2 {
+    font-size: 14px;
+  }
+
+  .modal-content__input::placeholder {
+    font-size: 30px;
+    font-weight: 700;
+    color: #d7d7d7;
+  }
+  .string-left__icon {
+    width: 16px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .modal-content__title {
+    margin-bottom: 15px;
+    color: black;
+    max-width: 100%;
+    width: 75%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: rgb(55, 53, 47);
+    margin-left: 30px;
+    margin-top: 50px;
+  }
+  .modal-content__table {
+    margin-top: 5px;
+    padding-left: 30px;
+    padding-right: 30px;
+    max-width: 100%;
+    width: 100%;
+  }
+  .modal-content__input {
+    height: 40px;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .string-text {
+    font-size: 14px;
+  }
+
+  .string-text-2 {
+    font-size: 14px;
+  }
+
+  .modal-content__input::placeholder {
+    font-size: 30px;
+    font-weight: 700;
+    color: #d7d7d7;
+  }
+  .comments__input::placeholder {
+    color: #a2a2a2;
+    font-size: 14px;
+    padding-left: 8px;
+  }
+}
+
+@media screen and (max-width: 290px) {
+  .modal-content__title {
+    margin-bottom: 15px;
+    color: black;
+    max-width: 100%;
+    width: 75%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: rgb(55, 53, 47);
+    margin-left: 5px;
+    margin-top: 50px;
+  }
+  .modal-content__table {
+    margin-top: 5px;
+    padding-left: 5px;
+    padding-right: 30px;
+    max-width: 100%;
+    width: 100%;
+  }
+  .modal-content__input {
+    height: 40px;
+    font-size: 30px;
+    font-weight: 500;
+  }
+
+  .string-text {
+    font-size: 14px;
+  }
+
+  .string-text-2 {
+    font-size: 14px;
+  }
+
+  .modal-content__input::placeholder {
+    font-size: 30px;
+    font-weight: 700;
+    color: #d7d7d7;
+  }
+
+  .string-left {
+    width: 150px;
+  }
+  .comments__input::placeholder {
+    color: #a2a2a2;
+    font-size: 14px;
+    padding-left: 8px;
+  }
 }
 </style>

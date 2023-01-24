@@ -323,4 +323,18 @@ const onCopy = () => {
   flex-shrink: 0;
   backface-visibility: hidden;
 }
+
+@media screen and (max-width: 1080px) {
+  .modal-overlay {
+    display: block;
+  }
+  .modal {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 3000px;
+    height: auto;
+  }
+}
 </style>

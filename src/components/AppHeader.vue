@@ -10,16 +10,16 @@
       <div class="modal-header__container-icons--right">
         <div class="icon__share">Share</div>
         <div class="icon--right chat">
-          <img src="../assets/img/chat.svg" />
+          <img src="../assets/img/chat.svg" class="icon" />
         </div>
         <div class="icon--right time">
-          <img src="../assets/img/time.svg" />
+          <img src="../assets/img/time.svg" class="icon" />
         </div>
         <div class="icon--right star">
-          <img src="../assets/img/star.svg" />
+          <img src="../assets/img/star.svg" class="icon" />
         </div>
         <div class="icon__ellipsis--left">
-          <img src="../assets/img/dots.svg" />
+          <img src="../assets/img/dots.svg" class="icon" />
         </div>
       </div>
     </div>
@@ -132,5 +132,67 @@
 .star:hover {
   background-color: #eeeeee;
   transition: 0.1s;
+}
+
+@media screen and (max-width: 480px) {
+  .header__heading {
+    font-size: 16px;
+  }
+
+  .icon__share {
+    font-size: 12px;
+    width: 30px;
+  }
+
+  .icon {
+    width: 16px;
+  }
+
+  .icon--right {
+    margin-right: 0px;
+    width: 20px;
+  }
+
+  .icon__ellipsis--left {
+    width: 20px;
+    border-radius: 3px;
+  }
+  .time {
+    display: none;
+  }
+  .star {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 291px) {
+  .header__heading {
+    font-size: 12px;
+  }
+
+  .icon__share {
+    font-size: 12px;
+    width: 30px;
+  }
+
+  .icon {
+    width: 16px;
+  }
+
+  .icon--right {
+    margin-right: 0px;
+    width: 20px;
+  }
+
+  .icon__ellipsis--left {
+    width: 20px;
+    border-radius: 3px;
+  }
+  .time {
+    display: none;
+  }
+  .star {
+    display: none;
+  }
 }
 </style>

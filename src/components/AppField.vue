@@ -8,6 +8,13 @@
     @mouseover="() => (plusVisibility = 'visible')"
     @mouseleave="() => (plusVisibility = 'hidden')"
   >
+    <div class="day__container--num">{{ date.slice(8, 10) }}</div>
+    <div
+      class="card_adapt"
+      v-for="task in tasks"
+      :key="task.id"
+      @click.stop="modalOpenRedact(task.id)"
+    ></div>
     <div class="day__container">
       <div
         class="day__container--plus"
@@ -21,7 +28,6 @@
           ></path>
         </svg>
       </div>
-      <div class="day__container--num">{{ date.slice(8, 10) }}</div>
     </div>
     <task-card
       @mouseover="Resizable($event.target)"
@@ -33,7 +39,9 @@
       :task="task"
       @click-on-checkbox="changeCheckbox(task.id)"
       @delete-todo="deleteTodo(task.id)"
-    ></task-card>
+    >
+      <div class="resizer"></div>
+    </task-card>
   </div>
 </template>
 <script setup lang="ts">
@@ -63,80 +71,48 @@ const props = defineProps({
   },
 });
 
-function direction(elem, event, maxPad) {
-  let res = 8;
-  const pad = maxPad || 4;
-  const pos = elem.getBoundingClientRect();
-  const top = pos.top;
-  const left = pos.left;
-  const width = elem.clientWidth;
-  const height = elem.clientHeight;
-  const eTop = event.clientY;
-  const eLeft = event.clientX;
-  const isTop = eTop - top < pad;
-  const isRight = left + width - eLeft < pad;
-  const isBottom = top + height - eTop < pad;
-  const isLeft = eLeft - left < pad;
-  if (isTop) res = 0;
-  if (isRight) res = 1;
-  if (isBottom) res = 2;
-  if (isLeft) res = 3;
+const createResizableColumn = function (col, resizer) {
+  // Track the current position of mouse
+  let x = 0;
+  let w = 0;
 
-  return res;
-}
-const cursors = "n w s e ne se sw nw".split(" ");
+  const mouseDownHandler = function (e) {
+    x = e.clientX;
 
-function Resizable(elem, options) {
-  options = options || {};
-  options.max = options.max || [1000, 1000];
-  options.min = options.min || [10, 10];
-  options.allow = (options.allow || "11111111").split("");
+    // Calculate the current width of column
+    const styles = window.getComputedStyle(col);
+    w = parseInt(styles.width, 10);
 
-  elem.addEventListener("mousemove", function (e) {
-    let dir = direction(this, e);
-    if (options.allow[dir] === "0") return;
-    this.style.cursor = dir === 8 ? "default" : cursors[dir] + "-resize";
-  });
-
-  elem.addEventListener("mousedown", resizeStart);
-  document.body.onselectstart = function () {
-    return false;
+    // Attach listeners for document's events
+    document.addEventListener("mousemove", mouseMoveHandler);
+    document.addEventListener("mouseup", mouseUpHandler);
+    resizer.classList.add("resizing");
   };
 
-  elem.min = options.min;
-  elem.max = options.max;
-  elem.allow = options.allow;
-  elem.pos = elem.getBoundingClientRect();
+  const mouseMoveHandler = function (e) {
+    // Determine how far the mouse has been moved
+    const dx = e.clientX - x;
 
-  function resizeStart(ev) {
-    const dir = direction(this, ev);
-    if (this.allow[dir] == "0") return;
-    document.documentElement.style.cursor = this.style.cursor =
-      cursors[dir] + "-resize";
-    const pos = this.getBoundingClientRect();
-    const elem = this;
-    const height = this.clientHeight;
-    document.addEventListener("mousemove", resize);
-    document.addEventListener("mouseup", function () {
-      document.removeEventListener("mousemove", resize);
-      document.documentElement.style.cursor = elem.style.cursor = "default";
-      document.body.onselectstart = null;
-    });
+    // Update the width of column
+    col.style.width = `${w + dx}px`;
+  };
 
-    function resize(e) {
-      if (dir === 0) {
-        elem.style.top = e.clientY - ev.clientY + pos.top;
-        elem.style.height = height + ev.clientY - e.clientY;
-      }
-      if (dir === 1) {
-        elem.style.width = elem.style.width + "500px";
-      }
-      if (dir === 3) {
-        elem.style.width = elem.style.width + "500px";
-      }
-    }
-  }
-}
+  // When user releases the mouse, remove the existing event listeners
+  const mouseUpHandler = function () {
+    document.removeEventListener("mousemove", mouseMoveHandler);
+    document.removeEventListener("mouseup", mouseUpHandler);
+    resizer.classList.remove("resizing");
+  };
+
+  resizer.addEventListener("mousedown", mouseDownHandler);
+};
+
+setTimeout(() => {
+  createResizableColumn(
+    document.querySelector(".task_card"),
+    document.querySelector(".resizer")
+  );
+}, 1000);
 
 const onDrop = (e) => {
   const taskId = parseInt(e.dataTransfer.getData("taskId"));
@@ -171,14 +147,37 @@ const newCard = () => {
 </script>
 
 <style scoped lang="scss">
+.resizer {
+  background-color: #9d0000;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 0;
+  width: 5px;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.resizer:hover,
+.resizing {
+  border-right: 2px solid blue;
+}
+.card_adapt__container {
+  display: none;
+}
+
+.card_adapt {
+  display: none;
+}
+
 .plus-svg {
   width: 16px;
   height: 16px;
   display: inline-block;
   fill: rgba(55, 53, 47, 0.45);
 }
+
 .day {
-  width: 250px;
   min-height: 250px;
   flex: 1 0 0px;
   border-right: 1px solid rgb(233, 233, 231);
@@ -186,7 +185,7 @@ const newCard = () => {
   cursor: default;
   background: rgb(251, 251, 250);
 
-  &__container {
+  &__contaianer {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -211,15 +210,79 @@ const newCard = () => {
       left: 6px;
     }
     &--num {
+      margin-top: 10px;
+      margin-right: 10px;
       font-size: 18px;
-      top: 4px;
-      right: 10px;
       height: 24px;
       line-height: 24px;
       text-align: right;
       transition: color 100ms ease-out 0s;
       color: rgba(55, 53, 47, 0.5);
     }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .content {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  .day {
+    min-height: 200px;
+    flex: 1 0 0px;
+    border-right: 1px solid rgb(233, 233, 231);
+    border-bottom: 1px solid rgb(233, 233, 231);
+    cursor: default;
+    background: rgb(251, 251, 250);
+  }
+}
+@media screen and (max-width: 1080px) {
+  .content {
+    margin-left: 35px;
+    margin-right: 35px;
+  }
+  .day {
+    min-height: 100px;
+    flex: 1 0 0px;
+    border-right: 1px solid rgb(233, 233, 231);
+    border-bottom: 1px solid rgb(233, 233, 231);
+    cursor: default;
+    background: rgb(251, 251, 250);
+  }
+}
+@media screen and (max-width: 480px) {
+  .content {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .day {
+    min-height: 50px;
+    flex: 1 0 0px;
+    border-right: 1px solid rgb(233, 233, 231);
+    border-bottom: 1px solid rgb(233, 233, 231);
+    cursor: default;
+    background: rgb(251, 251, 250);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+  }
+  .day__container--num {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .card_adapt {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 14px;
+    background-color: #707070;
+    position: absolute;
+  }
+  .day__container--plus {
+    display: none;
   }
 }
 </style>

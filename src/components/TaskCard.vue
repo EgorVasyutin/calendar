@@ -7,6 +7,7 @@
     @dragenter.prevent
     @dragover.prevent
   >
+    <slot />
     <div class="card_container">
       <div class="card-content">
         <div class="card-content__name">{{ task.title }}</div>
@@ -70,6 +71,12 @@ const onDragStart = (e) => {
   e.dataTransfer.effectAllowed = "move";
   e.dataTransfer.setData("taskId", props.task.id);
 };
+
+setTimeout(() => {
+  document
+    .querySelector(".resizer")
+    .removeEventListener("click", onDragStart, false);
+}, 1000);
 
 const deleteTodo = () => {
   emit("delete-todo");
@@ -239,6 +246,24 @@ const clickOnCheckbox = () => {
         margin: 0px 4px 0px 0px;
       }
     }
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  .card {
+    height: 175px;
+  }
+}
+
+@media only screen and (max-width: 1080px) {
+  .card {
+    height: 100px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .card {
+    display: none;
   }
 }
 </style>

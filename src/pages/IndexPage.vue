@@ -37,17 +37,15 @@
       </div>
     </div>
     <div class="calendar">
-      <div class="calendar-header">
-        <div class="mouth_sun mouth">Sun</div>
-        <div class="mouth">Mon</div>
-        <div class="mouth">Tue</div>
-        <div class="mouth">Wed</div>
-        <div class="mouth">Thu</div>
-        <div class="mouth">Fri</div>
-        <div class="mouth_sat mouth">Sat</div>
-      </div>
       <div class="calendar__container">
         <div class="calendar__container__days">
+          <div class="mouth_sun mouth">Sun</div>
+          <div class="mouth">Mon</div>
+          <div class="mouth">Tue</div>
+          <div class="mouth">Wed</div>
+          <div class="mouth">Thu</div>
+          <div class="mouth">Fri</div>
+          <div class="mouth_sat mouth">Sat</div>
           <app-field
             v-for="(fieldLine, idx) in dats.length"
             :key="fieldLine"
@@ -309,7 +307,7 @@ const modalOpen = () => {
   backface-visibility: hidden;
 }
 .chevronDown {
-  width: 10px;
+  width: 20px;
   height: 100%;
   display: block;
   fill: white;
@@ -468,23 +466,11 @@ const modalOpen = () => {
 .calendar {
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
 
-  &-header {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 48px 0;
+  .mouth {
     color: rgba(55, 53, 47, 0.5);
-    box-shadow: rgb(233 233 231) 0px 1px 0px;
-
-    .mouth_sun {
-      margin-left: 99px;
-    }
-    .mouth_sat {
-      margin-right: 120px;
-    }
-    .mouth {
-      margin-bottom: 5px;
-    }
+    box-shadow: rgb(233 233 231) 0px -1px 0px inset;
   }
   &__container {
     align-items: center;
@@ -497,7 +483,7 @@ const modalOpen = () => {
       grid-template-columns: repeat(7, 1fr);
       grid-column: 7;
       grid-row: auto;
-      box-shadow: rgb(233 233 231) -1px 0px 0px;
+      box-shadow: rgb(233 233 231) -1px 16px 0px;
       margin-top: 1px;
       overflow: hidden;
     }
@@ -600,6 +586,7 @@ const modalOpen = () => {
     }
   }
 }
+
 .arrows:hover {
   background-color: #eeeeee;
   transition: 0.1s;
@@ -715,5 +702,185 @@ const modalOpen = () => {
 .checkbox {
   width: 25px;
   height: 25px;
+}
+
+@media screen and (max-width: 1440px) {
+  .content {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+}
+@media screen and (max-width: 1080px) {
+  .content {
+    margin-left: 35px;
+    margin-right: 35px;
+  }
+  .checkbox {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .content {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .data {
+    display: none;
+  }
+  .filter {
+    display: none;
+  }
+  .sort {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .content-menu__fn__container--field {
+    padding: 5px 5px 5px 5px;
+    color: #a2a2a2;
+    font-size: 16px;
+    margin-bottom: 7px;
+    border-radius: 5px;
+  }
+
+  .dots {
+    width: 18px;
+  }
+  .new {
+    border-radius: 3px;
+    color: white;
+    background-color: rgb(35, 131, 226);
+    width: 50px;
+    height: 30px;
+  }
+
+  .new__arrow {
+    color: white;
+    background-color: rgb(35, 131, 226);
+    width: 20px;
+    height: 30px;
+  }
+
+  .calendar-data {
+    font-weight: 600;
+    margin-left: 8px;
+    margin-right: 8px;
+    line-height: 1;
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  .month-switch__arrow-left--svg {
+    width: 15px;
+    height: 15px;
+    display: block;
+    fill: rgba(55, 53, 47, 0.45);
+    flex-shrink: 0;
+    backface-visibility: hidden;
+  }
+
+  .month-switch__text {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .content-menu__fn__container--field {
+    padding: 5px 5px 5px 5px;
+    color: #a2a2a2;
+    font-size: 16px;
+    margin-bottom: 7px;
+    border-radius: 5px;
+  }
+
+  .dots {
+    width: 18px;
+  }
+  .new {
+    font-size: 14px;
+    border-radius: 3px;
+    color: white;
+    background-color: rgb(35, 131, 226);
+    width: 40px;
+    height: 25px;
+  }
+
+  .new__arrow {
+    color: white;
+    background-color: rgb(35, 131, 226);
+    width: 15px;
+    height: 25px;
+  }
+
+  .calendar-data {
+    font-weight: 600;
+    margin-left: 8px;
+    margin-right: 8px;
+    line-height: 1;
+    font-size: 14px;
+    margin-top: 15px;
+  }
+
+  .month-switch__arrow-left {
+    height: 20px;
+    width: 20px;
+  }
+  .month-switch__arrow-right {
+    height: 20px;
+    width: 20px;
+  }
+
+  .month-switch__arrow-left--svg {
+    width: 12px;
+    height: 12px;
+    display: block;
+    fill: rgba(55, 53, 47, 0.45);
+    flex-shrink: 0;
+    backface-visibility: hidden;
+  }
+
+  .month-switch__text {
+    font-size: 10px;
+  }
+}
+
+@media only screen and (max-width: 291px) {
+  .calendar-data {
+    font-weight: 600;
+    margin-left: 8px;
+    margin-right: 8px;
+    line-height: 1;
+    font-size: 10px;
+    margin-top: 15px;
+  }
+
+  .month-switch__arrow-left {
+    height: 15px;
+    width: 15px;
+    margin-top: 0px;
+  }
+  .month-switch__arrow-right {
+    height: 15px;
+    width: 15px;
+    margin-top: 0px;
+  }
+
+  .month-switch__arrow-left--svg {
+    width: 10px;
+    height: 10px;
+    display: block;
+    fill: rgba(55, 53, 47, 0.45);
+    flex-shrink: 0;
+    backface-visibility: hidden;
+  }
+
+  .month-switch__text {
+    font-size: 10px;
+    margin-top: 0px;
+    width: 20px;
+    height: 30px;
+  }
 }
 </style>
