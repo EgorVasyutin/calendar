@@ -17,49 +17,59 @@
         :error="v.passwordField.$errors"
       ></app-input>
     </div>
-    <app-button label="Login" />
+    <app-button label="Войти" class="form-btm" />
   </form>
+  <app-button label="Авторизоваться" :outlined="true" @click="routeAuth" />
 </template>
 
 <script setup lang="ts">
-import useVuelidate from "@vuelidate/core";
-import { ref, computed } from "vue";
-import { minLength, helpers, email, required } from "@vuelidate/validators";
-import axiosInstance from "@/axiosInstance";
-
-const emailField = ref("");
-const passwordField = ref("");
+import useVuelidate from '@vuelidate/core'
+import { ref, computed } from 'vue'
+import { minLength, helpers, email, required } from '@vuelidate/validators'
+import useAuth from '@/composables/useAuth'
+import router from '@/router'
+const auth = useAuth()
+const emailField = ref('')
+const passwordField = ref('')
 
 const rules = computed(() => ({
   emailField: {
-    required: helpers.withMessage("Это поле обязательно", required),
-    email: helpers.withMessage("Вы ввели не верный email", email),
+    required: helpers.withMessage('Это поле обязательно', required),
+    email: helpers.withMessage('Вы ввели не верный email', email),
   },
   passwordField: {
-    required: helpers.withMessage("Это поле обязательно", required),
-    minLength: helpers.withMessage(
-      "Минимальная длина: 6 символа",
-      minLength(6)
-    ),
+    required: helpers.withMessage('Это поле обязательно', required),
+    minLength: helpers.withMessage('Минимальная длина: 6 символа', minLength(6)),
   },
-}));
+}))
 
 const v = useVuelidate(rules, {
   emailField,
   passwordField,
-});
+})
 
-const submitForm = () => {
-  v.value.$touch();
-  if (v.value.$error) return;
-  axiosInstance.post("/sign-in", {
+const submitForm = async () => {
+  v.value.$touch()
+  if (v.value.$error) return
+
+  const response = await auth.singIn({
     email: v.value.emailField.$model,
     password: v.value.passwordField.$model,
-  });
-};
+  })
+  auth.userId = response.data.user.id
+  localStorage.setItem('accessToken', response.data.accessToken)
+  router.push('/')
+}
+
+const routeAuth = () => {
+  router.push('/Authorization')
+}
 </script>
 
 <style scoped lang="scss">
+.form-btm {
+  width: 152px;
+}
 .text {
   color: black;
   font-weight: bold;

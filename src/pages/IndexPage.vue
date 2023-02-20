@@ -2,9 +2,7 @@
   <div class="content">
     <div class="content-menu__fn">
       <div class="content-menu__fn__container">
-        <div class="content-menu__fn__container--field data">No date ()</div>
-        <div class="content-menu__fn__container--field filter">Filter</div>
-        <div class="content-menu__fn__container--field sort">Sort</div>
+        <div class="content-menu__fn__container--field filter">Фильтр</div>
         <div class="content-menu__fn__container--field search"></div>
         <div class="content-menu__fn__container--field arrows">
           <img src="../assets/img/dots.svg" class="dots" />
@@ -17,35 +15,28 @@
     </div>
     <div class="data-switch__container">
       <div class="data__container">
-        <div class="calendar-data">September 2022</div>
+        <div class="calendar-data">Сентябрь 2022</div>
       </div>
       <div class="month-switch">
         <div class="month-switch__arrow-left">
-          <img
-            src="../assets/img/arrow-left.svg"
-            @click="scrollMonthAgo"
-            class="month-switch__arrow-left--svg"
-          />
+          <img src="../assets/img/arrow-left.svg" @click="scrollMonthAgo" class="month-switch__arrow-left--svg" />
         </div>
-        <div class="month-switch__text" @click="scrollToday">Today</div>
+        <div class="month-switch__text" @click="scrollToday">Сегодня</div>
         <div @click="scrollMonthBefore" class="month-switch__arrow-right">
-          <img
-            src="../assets/img/arrow-right.svg"
-            class="month-switch__arrow-left--svg"
-          />
+          <img src="../assets/img/arrow-right.svg" class="month-switch__arrow-left--svg" />
         </div>
       </div>
     </div>
     <div class="calendar">
       <div class="calendar__container">
         <div class="calendar__container__days">
-          <div class="mouth_sun mouth">Sun</div>
-          <div class="mouth">Mon</div>
-          <div class="mouth">Tue</div>
-          <div class="mouth">Wed</div>
-          <div class="mouth">Thu</div>
-          <div class="mouth">Fri</div>
-          <div class="mouth_sat mouth">Sat</div>
+          <div class="mouth_sun mouth">Вос</div>
+          <div class="mouth">Пон</div>
+          <div class="mouth">Вт</div>
+          <div class="mouth">Сред</div>
+          <div class="mouth">Чет</div>
+          <div class="mouth">Пят</div>
+          <div class="mouth_sat mouth">Суб</div>
           <app-field
             v-for="(fieldLine, idx) in dats.length"
             :key="fieldLine"
@@ -62,11 +53,7 @@
       </div>
     </div>
   </div>
-  <modal-window
-    :modal-open="modalValue"
-    @modal-close="modalClose"
-    @on-copy="onCopy"
-  >
+  <modal-window :modal-open="modalValue" @modal-close="modalClose" @on-copy="onCopy">
     <task-form
       :created="false"
       :taskId="idTodo"
@@ -78,196 +65,170 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import AppField from "@/components/AppField.vue";
-import useTasks from "@/composables/useTasks";
-import "@vuepic/vue-datepicker/dist/main.css";
+import { ref, watch } from 'vue'
+import AppField from '@/components/AppField.vue'
+import useTasks from '@/composables/useTasks'
+import '@vuepic/vue-datepicker/dist/main.css'
 
-import modalWindow from "@/components/ModalWindow.vue";
-import { Task } from "@/types";
-// import Datepicker from "@vuepic/vue-datepicker";
-import TaskForm from "@/components/TaskForm.vue";
+import modalWindow from '@/UI/ModalWindow.vue'
+import { Task } from '@/types'
 
-const { tasks, getCards, deleteTodo, patch, getOneCard, newCard } = useTasks();
+import TaskForm from '@/components/TaskForm.vue'
 
-const idTodo = ref("");
+const { tasks, getCards, deleteTodo, patch, getOneCard, newCard } = useTasks()
+
+const idTodo = ref('')
 
 const task = ref({
-  title: "",
+  title: '',
   isDone: false,
-  type: "",
-  status: "",
-  priority: "",
+  type: '',
+  status: '',
+  priority: '',
   startDate: new Date().toISOString(),
   endDate: new Date().toISOString(),
-});
+})
 
-const dats = ref([]);
-const fullDates = ref<string[]>([]);
+const dats = ref([])
+const fullDates = ref<string[]>([])
 
-let modalValue = ref(false);
-
-// const editingModalFields = (
-//   newTitle,
-//   newIsDone,
-//   newType,
-//   newPriority,
-//   newStartDate,
-//   newEndDate
-// ) => {
-//   console.log(1);
-//   title.value = newTitle;
-//   isDone.value = newIsDone;
-//   type.value = newType;
-//   priority.value = newPriority;
-//   startDate.value = newStartDate;
-//   endDate.value = newEndDate;
-// };
+let modalValue = ref(false)
 
 const renderingCards = (): void => {
   for (let i = -14; i < 14; i++) {
-    const date = new Date();
+    const date = new Date()
 
-    date.setDate(date.getDate() + i);
-    dats.value.push(date.toISOString());
-    fullDates.value.push(date.toISOString());
+    date.setDate(date.getDate() + i)
+    dats.value.push(date.toISOString())
+    fullDates.value.push(date.toISOString())
   }
-};
-renderingCards();
+}
+renderingCards()
 
-getCards();
+getCards()
 
 const clickOnCheckbox = async (id) => {
   await tasks.value.forEach((Task) => {
-    if (Task.id === id) task.value.isDone = !Task.isDone;
-  });
-};
+    if (Task.id === id) task.value.isDone = !Task.isDone
+  })
+}
 
 // const createCard = false;
 
 const createCard = () => {
   //без watch-а
   watch(modalValue, async () => {
-    await newCard(task.value).then(await getCards);
-  });
-};
+    await newCard(task.value).then(await getCards)
+  })
+}
 
 const modalOpenRedact = (id) => {
-  idTodo.value = id;
-};
+  idTodo.value = id
+}
 
 const changeTaskStartDate = (id, date) => {
-  patch(id, { startDate: date });
-  patch(id, { endDate: date }).then(getCards);
-};
+  patch(id, { startDate: date })
+  patch(id, { endDate: date }).then(getCards)
+}
 
 const changeCheckbox = async (id) => {
-  await clickOnCheckbox(id);
-  patch(id, { isDone: task.value.isDone }).then(await getCards);
-};
+  await clickOnCheckbox(id)
+  patch(id, { isDone: task.value.isDone }).then(await getCards)
+}
 
 const onCopy = async () => {
-  const copyTask = await getOneCard(idTodo.value);
-  console.log(copyTask);
-  newCard(copyTask).then(await getCards);
-};
+  const copyTask = await getOneCard(idTodo.value)
+  console.log(copyTask)
+  newCard(copyTask).then(await getCards)
+}
 
 const updateTask = async () => {
-  await getCards();
-};
+  await getCards()
+}
 
 const scrollMonthAgo = () => {
-  let date = new Date(dats.value[dats.value.length - 1]);
-  console.log(date);
-  date.setDate(date.getMonth() + 1);
+  let date = new Date(dats.value[dats.value.length - 1])
+  console.log(date)
+  date.setDate(date.getMonth() + 1)
   for (let i = 0; i < 31; i++) {
-    date.setDate(date.getDate() - 1);
-    dats.value.unshift(date.toISOString());
-    if (
-      new Date(date.getDate() - 1).toISOString().slice(8, 11) ===
-      dats.value[dats.value.length - 1].slice(8, 11)
-    ) {
-      return;
+    date.setDate(date.getDate() - 1)
+    dats.value.unshift(date.toISOString())
+    if (new Date(date.getDate() - 1).toISOString().slice(8, 11) === dats.value[dats.value.length - 1].slice(8, 11)) {
+      return
     }
   }
 
-  scrollUp();
-};
+  scrollUp()
+}
 
-window.addEventListener("scroll", () => {
-  const height = document.body.offsetHeight;
-  const screenHeight = window.innerHeight;
-  const scrolled = window.scrollY;
-  const threshold = height - (screenHeight - 300);
-  const position = scrolled + screenHeight;
+window.addEventListener('scroll', () => {
+  const height = document.body.offsetHeight
+  const screenHeight = window.innerHeight
+  const scrolled = window.scrollY
+  const threshold = height - (screenHeight - 300)
+  const position = scrolled + screenHeight
 
   if (position >= threshold) {
-    addMonthBefore();
+    addMonthBefore()
   }
-});
+})
 
 const scrollUp = () => {
   window.scroll({
     left: 0,
     top: 0,
-    behavior: "smooth",
-  });
-};
+    behavior: 'smooth',
+  })
+}
 
 const scrollToday = () => {
   window.scroll({
     left: 0,
     top: (14 * 250) / 7 + 250,
-    behavior: "smooth",
-  });
-};
+    behavior: 'smooth',
+  })
+}
 
 const scrollDown = () => {
   window.scroll({
     left: 0,
     top: (dats.value.length * 250) / 7 + 250,
-    behavior: "smooth",
-  });
-};
+    behavior: 'smooth',
+  })
+}
 
 const addMonthBefore = () => {
-  let date = new Date(dats.value[dats.value.length - 1]);
-  console.log(date);
-  date.setDate(date.getMonth() + 1);
+  let date = new Date(dats.value[dats.value.length - 1])
+  console.log(date)
+  date.setDate(date.getMonth() + 1)
   for (let i = 0; i < 31; i++) {
-    date.setDate(date.getDate() + 1);
-    dats.value.push(date.toISOString());
-    if (
-      new Date(date.getDate() - 1).toISOString() ===
-      dats.value[dats.value.length - 1]
-    ) {
-      return;
+    date.setDate(date.getDate() + 1)
+    dats.value.push(date.toISOString())
+    if (new Date(date.getDate() - 1).toISOString() === dats.value[dats.value.length - 1]) {
+      return
     }
   }
-};
+}
 
 const scrollMonthBefore = () => {
-  addMonthBefore();
-  setTimeout(() => scrollDown(), 50);
-};
+  addMonthBefore()
+  setTimeout(() => scrollDown(), 50)
+}
 
 const getFieldTasks = (date: string): Task[] => {
-  return tasks.value.filter(
-    (task) =>
-      task.startDate.slice(0, 11) <= date && date <= task.endDate.slice(0, 11)
-  );
-};
+  return tasks.value.filter((task) => task.startDate.slice(0, 11) <= date && date <= task.endDate.slice(0, 11))
+}
 
 const deleteTask = (id) => {
-  deleteTodo(id).then(getCards);
-};
+  deleteTodo(id).then(getCards)
+}
 
 const modalClose = () => {
-  modalValue.value = false;
-};
+  modalValue.value = false
+}
 const modalOpen = () => {
-  modalValue.value = true;
-};
+  modalValue.value = true
+}
 </script>
 
 <style lang="scss">

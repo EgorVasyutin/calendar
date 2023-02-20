@@ -3,28 +3,33 @@
     <div class="header-left">
       <div class="header-left__container">
         <img src="../assets/img/check.svg" />
-        <div class="header__heading">Calendar / Task List</div>
+        <div class="header__heading">Календарь / Задачи</div>
       </div>
     </div>
     <div class="header-right">
       <div class="modal-header__container-icons--right">
-        <div class="icon__share">Share</div>
-        <div class="icon--right chat">
-          <img src="../assets/img/chat.svg" class="icon" />
-        </div>
-        <div class="icon--right time">
-          <img src="../assets/img/time.svg" class="icon" />
-        </div>
-        <div class="icon--right star">
-          <img src="../assets/img/star.svg" class="icon" />
-        </div>
-        <div class="icon__ellipsis--left">
-          <img src="../assets/img/dots.svg" class="icon" />
-        </div>
+        <app-button label="Выйти" @click="routeLogin" :outlined="true" class="form-btm" />
       </div>
     </div>
   </header>
 </template>
+
+<script setup>
+import router from '@/router'
+import useAuth from '@/composables/useAuth'
+const auth = useAuth()
+
+const routeLogin = async () => {
+  try {
+    await auth.logout()
+    localStorage.removeItem('token')
+    auth.userId = null
+    router.push('/login')
+  } catch (e) {
+    console.log(e.response?.data?.message)
+  }
+}
+</script>
 
 <style scoped lang="scss">
 .header {
@@ -78,7 +83,6 @@
 
 .icon__share {
   color: black;
-  margin-right: 5px;
   user-select: none;
   transition: background 20ms ease-in 0s;
   cursor: pointer;
@@ -134,9 +138,19 @@
   transition: 0.1s;
 }
 
+@media screen and (max-width: 720px) {
+  .header {
+    margin-bottom: 25px;
+  }
+}
+
 @media screen and (max-width: 480px) {
   .header__heading {
     font-size: 16px;
+  }
+
+  .header {
+    margin-bottom: 15px;
   }
 
   .icon__share {

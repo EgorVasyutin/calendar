@@ -1,10 +1,6 @@
 <template>
   <div class="modal-content__title">
-    <input
-      class="modal-content__input"
-      placeholder="Untitled"
-      v-model="task.title"
-    />
+    <input class="modal-content__input" placeholder="Untitled" v-model="task.title" />
   </div>
   <div class="modal-content__table">
     <div class="modal-content__table--string">
@@ -13,14 +9,7 @@
         <div class="string-text">Data</div>
       </div>
       <div class="container--data">
-        <datepicker
-          range
-          lang="en"
-          type="date"
-          v-model="dateModel"
-          class="startData"
-          placeholder="Start data "
-        />
+        <datepicker range lang="en" type="date" v-model="dateModel" class="startData" placeholder="Start data " />
       </div>
     </div>
     <div class="modal-content__table--string">
@@ -36,12 +25,7 @@
         <div class="string-text">Готово</div>
       </div>
       <div class="string-right string-text">
-        <input
-          type="checkbox"
-          class="checkbox"
-          :checked="isDoneProps"
-          @click="emits('clickOnCheckbox')"
-        />
+        <input type="checkbox" class="checkbox" :checked="isDoneProps" @click="emits('clickOnCheckbox')" />
       </div>
     </div>
     <div class="modal-content__table--string">
@@ -54,24 +38,9 @@
           @close="openAndClosePopper('priority')"
           @click.stop.prevent
         >
-          <button
-            class="popper__btm-tag"
-            @click="clickOnTag('priority', $event)"
-          >
-            1
-          </button>
-          <button
-            class="popper__btm-tag"
-            @click="clickOnTag('priority', $event)"
-          >
-            2
-          </button>
-          <button
-            class="popper__btm-tag"
-            @click="clickOnTag('priority', $event)"
-          >
-            3
-          </button>
+          <button class="popper__btm-tag" @click="clickOnTag('priority', $event)">1</button>
+          <button class="popper__btm-tag" @click="clickOnTag('priority', $event)">2</button>
+          <button class="popper__btm-tag" @click="clickOnTag('priority', $event)">3</button>
         </app-popper>
       </div>
       <div class="green string-text-2 string-right priority">
@@ -88,15 +57,9 @@
           @close="openAndClosePopper('status')"
           @click.stop.prevent
         >
-          <button class="popper__btm-tag" @click="clickOnTag('status', $event)">
-            1
-          </button>
-          <button class="popper__btm-tag" @click="clickOnTag('status', $event)">
-            2
-          </button>
-          <button class="popper__btm-tag" @click="clickOnTag('status', $event)">
-            3
-          </button>
+          <button class="popper__btm-tag" @click="clickOnTag('status', $event)">1</button>
+          <button class="popper__btm-tag" @click="clickOnTag('status', $event)">2</button>
+          <button class="popper__btm-tag" @click="clickOnTag('status', $event)">3</button>
         </app-popper>
       </div>
       <div class="string-right string-text-2 status">{{ task.status }}</div>
@@ -105,21 +68,10 @@
       <div class="string-left" @click="openAndClosePopper('type')">
         <img src="../assets/img/multiselect.svg" class="string-left__icon" />
         <div class="string-text">Тип</div>
-        <app-popper
-          class="popper"
-          :showPopper="showPopperType"
-          @close="openAndClosePopper('type')"
-          @click.stop.prevent
-        >
-          <button class="popper__btm-tag" @click="clickOnTag('type', $event)">
-            1
-          </button>
-          <button class="popper__btm-tag" @click="clickOnTag('type', $event)">
-            2
-          </button>
-          <button class="popper__btm-tag" @click="clickOnTag('type', $event)">
-            3
-          </button>
+        <app-popper class="popper" :showPopper="showPopperType" @close="openAndClosePopper('type')" @click.stop.prevent>
+          <button class="popper__btm-tag" @click="clickOnTag('type', $event)">1</button>
+          <button class="popper__btm-tag" @click="clickOnTag('type', $event)">2</button>
+          <button class="popper__btm-tag" @click="clickOnTag('type', $event)">3</button>
         </app-popper>
       </div>
       <div class="string-right string-text-2 type">{{ task.type }}</div>
@@ -140,14 +92,14 @@
 </template>
 
 <script setup lang="ts">
-import Datepicker from "@vuepic/vue-datepicker";
-import { debounce } from "throttle-debounce";
-import { ref, watch } from "vue";
-import AppPopper from "@/components/AppPopper";
+import Datepicker from '@vuepic/vue-datepicker'
+import { debounce } from 'throttle-debounce'
+import { ref, watch } from 'vue'
+import AppPopper from '@/UI/AppPopper'
 // import useTasks from "@/composables/useTasks";
-import useTasks from "@/composables/useTasks";
+import useTasks from '@/composables/useTasks'
 
-const { redact } = useTasks();
+const { redact } = useTasks()
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
@@ -163,83 +115,83 @@ const props = defineProps({
     type: String,
     required: true,
   },
-});
+})
 
 // const refProps = toRefs(props);
 
 // eslint-disable-next-line no-undef
-const emits = defineEmits(["modal-data", "task", "update-task"]);
+const emits = defineEmits(['modal-data', 'task', 'update-task'])
 
-const dateModel = ref("");
+const dateModel = ref('')
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const task = ref({
-  title: "",
+  title: '',
   isDone: false,
-  type: "",
-  status: "",
-  priority: "",
+  type: '',
+  status: '',
+  priority: '',
   startDate: new Date().toISOString(),
   endDate: new Date().toISOString(),
-});
+})
 
 const updateTask = async () => {
   // emits("task", task.value);
-  await redact(props.taskId, task.value);
-  emits("update-task");
-};
+  await redact(props.taskId, task.value)
+  emits('update-task')
+}
 
-const debounceUpdateTask = debounce(300, updateTask);
+const debounceUpdateTask = debounce(300, updateTask)
 
 watch(
   task,
   () => {
-    console.log(123);
-    debounceUpdateTask();
+    console.log(123)
+    debounceUpdateTask()
   },
-  { deep: true }
-);
+  { deep: true },
+)
 // eslint-disable-next-line no-unused-vars
-let modalValue = ref(false);
+let modalValue = ref(false)
 
-const showPopperPriority = ref(false);
+const showPopperPriority = ref(false)
 
-const showPopperStatus = ref(false);
+const showPopperStatus = ref(false)
 
-const showPopperType = ref(false);
+const showPopperType = ref(false)
 
 const openAndClosePopper = (name) => {
-  if (name === "priority") showPopperPriority.value = !showPopperPriority.value;
-  if (name === "status") showPopperStatus.value = !showPopperStatus.value;
-  if (name === "type") showPopperType.value = !showPopperType.value;
-};
+  if (name === 'priority') showPopperPriority.value = !showPopperPriority.value
+  if (name === 'status') showPopperStatus.value = !showPopperStatus.value
+  if (name === 'type') showPopperType.value = !showPopperType.value
+}
 
 const clickOnTag = (name, e) => {
-  if (name === "priority") {
-    document.querySelector(".priority").innerHTML = e.target.innerHTML;
+  if (name === 'priority') {
+    document.querySelector('.priority').innerHTML = e.target.innerHTML
     // if (refProps.created.value !== true) task.value.priority = e.target.innerHTML;
-    task.value.priority = e.target.innerHTML;
+    task.value.priority = e.target.innerHTML
   }
 
-  if (name === "status") {
-    document.querySelector(".status").innerHTML = e.target.innerHTML;
+  if (name === 'status') {
+    document.querySelector('.status').innerHTML = e.target.innerHTML
     // if (refProps.created.value !== true) task.value.status = e.target.innerHTML;
-    task.value.status = e.target.innerHTML;
+    task.value.status = e.target.innerHTML
   }
 
-  if (name === "type") {
-    document.querySelector(".type").innerHTML = e.target.innerHTML;
+  if (name === 'type') {
+    document.querySelector('.type').innerHTML = e.target.innerHTML
     // if (refProps.created.value !== true) task.value.type = e.target.innerHTML;
-    task.value.type = e.target.innerHTML;
+    task.value.type = e.target.innerHTML
   }
-};
+}
 
 watch(dateModel, () => {
   if (dateModel.value.length) {
-    task.value.startDate = dateModel.value[0].toISOString();
-    task.value.endDate = dateModel.value[1].toISOString();
+    task.value.startDate = dateModel.value[0].toISOString()
+    task.value.endDate = dateModel.value[1].toISOString()
   }
-});
+})
 
 // watch(refProps.created.value, () => {
 //   console.log(1);

@@ -1,9 +1,5 @@
 <template>
   <app-header></app-header>
-  <div>
-    <router-link to="/authorization">authorization</router-link>
-    <router-link to="/login">login</router-link>
-  </div>
   <router-view></router-view>
 </template>
 
@@ -18,9 +14,6 @@
   color: #2c3e50;
 }
 </style>
-<script>
-import AppHeader from "@/components/AppHeader";
-export default {
-  components: { AppHeader },
-};
+<script setup>
+import AppHeader from '@/components/AppHeader'
 </script>

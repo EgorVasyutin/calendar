@@ -13,12 +13,7 @@
         <div class="card-content__name">{{ task.title }}</div>
         <div class="card-content__container">
           <div class="card-content__container--checkbox">
-            <input
-              type="checkbox"
-              class="checkbox"
-              :checked="task.isDone"
-              @click.stop="clickOnCheckbox()"
-            />
+            <input type="checkbox" class="checkbox" :checked="task.isDone" @click.stop="clickOnCheckbox()" />
           </div>
           <div class="card-content__container--status" v-if="task.status">
             <div class="status">{{ task.status }}</div>
@@ -32,11 +27,7 @@
         </div>
       </div>
     </div>
-    <app-popper
-      class="popper"
-      :showPopper="showPopper"
-      @close="openAndClosePopper"
-      @click.stop
+    <app-popper class="popper" :showPopper="showPopper" @close="openAndClosePopper" @click.stop
       ><slot>
         <button class="popper__btm" @click="deleteTodo">Delete</button>
         <button class="popper__btm">Copy</button></slot
@@ -46,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import AppPopper from "@/components/AppPopper.vue";
-import { ref } from "vue";
+import AppPopper from '@/UI/AppPopper.vue'
+import { ref } from 'vue'
 // eslint-disable-next-line no-undef,no-unused-vars
-const emit = defineEmits(["clickOnCheckbox", "delete-todo", "drop-task"]);
+const emit = defineEmits(['clickOnCheckbox', 'delete-todo', 'drop-task'])
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
@@ -57,34 +48,32 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-});
-console.log(props.task);
+})
+console.log(props.task)
 
-const showPopper = ref(false);
+const showPopper = ref(false)
 
 const openAndClosePopper = () => {
-  showPopper.value = !showPopper.value;
-};
+  showPopper.value = !showPopper.value
+}
 
 const onDragStart = (e) => {
-  e.dataTransfer.dropEffect = "move";
-  e.dataTransfer.effectAllowed = "move";
-  e.dataTransfer.setData("taskId", props.task.id);
-};
+  e.dataTransfer.dropEffect = 'move'
+  e.dataTransfer.effectAllowed = 'move'
+  e.dataTransfer.setData('taskId', props.task.id)
+}
 
 setTimeout(() => {
-  document
-    .querySelector(".resizer")
-    .removeEventListener("click", onDragStart, false);
-}, 1000);
+  document.querySelector('.resizer').removeEventListener('click', onDragStart, false)
+}, 1000)
 
 const deleteTodo = () => {
-  emit("delete-todo");
-};
+  emit('delete-todo')
+}
 
 const clickOnCheckbox = () => {
-  emit("clickOnCheckbox");
-};
+  emit('clickOnCheckbox')
+}
 </script>
 
 <style scoped lang="scss">
@@ -137,8 +126,7 @@ const clickOnCheckbox = () => {
   height: 100%;
   background: white;
   border-radius: 3px;
-  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px,
-    rgb(15 15 15 / 10%) 0px 2px 4px;
+  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px, rgb(15 15 15 / 10%) 0px 2px 4px;
 }
 .card-content {
   user-select: none;

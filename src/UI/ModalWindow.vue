@@ -1,36 +1,37 @@
 <script setup lang="ts">
-import AppPopper from "@/components/AppPopper.vue";
-import { ref } from "vue";
+import AppPopper from '@/UI/AppPopper.vue'
+import { ref } from 'vue'
+import ModalIcons from '@/components/ModalIcons.vue'
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
   modalOpen: {
     type: Boolean,
     required: false,
   },
-});
+})
 // eslint-disable-next-line no-undef,no-unused-vars
-const emit = defineEmits(["modal-close", "delete-todo-modal", "on-copy"]);
+const emit = defineEmits(['modal-close', 'delete-todo-modal', 'on-copy'])
 
 const closeModal = () => {
-  emit("modal-close");
-};
+  emit('modal-close')
+}
 
 const deleteTodo = () => {
-  emit("delete-todo-modal");
-  openAndClosePopper();
-  closeModal();
-};
+  emit('delete-todo-modal')
+  openAndClosePopper()
+  closeModal()
+}
 
-const showPopper = ref(false);
+const showPopper = ref(false)
 
 const openAndClosePopper = () => {
-  showPopper.value = !showPopper.value;
-};
+  showPopper.value = !showPopper.value
+}
 
 const onCopy = () => {
-  emit("on-copy");
-  openAndClosePopper();
-};
+  emit('on-copy')
+  openAndClosePopper()
+}
 </script>
 
 <template>
@@ -49,27 +50,16 @@ const onCopy = () => {
             <!--            <div class="line"></div>-->
           </div>
           <div class="modal-header__container-icons--right">
-            <div class="icon__share">Share</div>
-            <div class="icon--right chat">
-              <img src="../assets/img/chat.svg" />
-            </div>
-            <div class="icon--right time">
-              <img src="../assets/img/time.svg" />
-            </div>
-            <div class="icon--right star">
-              <img src="../assets/img/star.svg" />
-            </div>
+            <modal-icons></modal-icons>
             <div class="icon__ellipsis--left" @click="openAndClosePopper">
               <img src="../assets/img/dots.svg" />
-              <app-popper
-                class="popper"
-                :showPopper="showPopper"
-                @close="openAndClosePopper"
-                @click.stop
-              >
+              <app-popper class="popper" :showPopper="showPopper" @close="openAndClosePopper" @click.stop>
                 <button class="popper__btm" @click="deleteTodo">Delete</button>
                 <button class="popper__btm" @click="onCopy">Copy</button>
               </app-popper>
+            </div>
+            <div class="icon--right cross" @click="closeModal">
+              <img src="../assets/img/cross.svg" class="cross_svg" />
             </div>
           </div>
         </div>
@@ -106,8 +96,7 @@ const onCopy = () => {
   max-width: 970px;
   border-radius: 3px;
   background: white;
-  box-shadow: rgb(15 15 15 / 2%) 0px 0px 0px 1px, rgb(15 15 15 / 3%) 0px 3px 6px,
-    rgb(15 15 15 / 6%) 0px 9px 24px;
+  box-shadow: rgb(15 15 15 / 2%) 0px 0px 0px 1px, rgb(15 15 15 / 3%) 0px 3px 6px, rgb(15 15 15 / 6%) 0px 9px 24px;
   top: 72px;
   left: 72px;
   right: 72px;
@@ -137,7 +126,7 @@ const onCopy = () => {
 
       &-icons--right {
         display: flex;
-        align-items: stretch;
+        align-items: center;
         flex-grow: 0;
         flex-shrink: 0;
         z-index: 1;
@@ -281,7 +270,22 @@ const onCopy = () => {
   transition: 0.1s;
 }
 
+.cross {
+  margin-left: 30px;
+  margin-bottom: 15px;
+  width: 15px;
+}
+
+.cross_svg {
+  width: 15px;
+}
+
 .chat:hover {
+  background-color: #eeeeee;
+  transition: 0.1s;
+}
+
+.cross:hover {
   background-color: #eeeeee;
   transition: 0.1s;
 }

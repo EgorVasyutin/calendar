@@ -9,18 +9,9 @@
     @mouseleave="() => (plusVisibility = 'hidden')"
   >
     <div class="day__container--num">{{ date.slice(8, 10) }}</div>
-    <div
-      class="card_adapt"
-      v-for="task in tasks"
-      :key="task.id"
-      @click.stop="modalOpenRedact(task.id)"
-    ></div>
+    <div class="card_adapt" v-for="task in tasks" :key="task.id" @click.stop="modalOpenRedact(task.id)"></div>
     <div class="day__container">
-      <div
-        class="day__container--plus"
-        @click="modalOpen"
-        :style="{ visibility: plusVisibility }"
-      >
+      <div class="day__container--plus" @click="modalOpen" :style="{ visibility: plusVisibility }">
         <svg viewBox="0 0 16 16" class="plus-svg">
           3
           <path
@@ -45,19 +36,19 @@
   </div>
 </template>
 <script setup lang="ts">
-import taskCard from "@/components/TaskCard.vue";
-import { ref } from "vue";
+import taskCard from '@/components/TaskCard.vue'
+import { ref } from 'vue'
 
 // eslint-disable-next-line no-undef
 const emits = defineEmits([
-  "open",
-  "open-redact",
-  "new-card",
-  "change-checkbox",
-  "delete-todo",
-  "drag-task",
-  "redact-task-date",
-]);
+  'open',
+  'open-redact',
+  'new-card',
+  'change-checkbox',
+  'delete-todo',
+  'drag-task',
+  'redact-task-date',
+])
 
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
@@ -67,83 +58,80 @@ const props = defineProps({
   },
   date: {
     type: String,
-    default: "",
+    default: '',
   },
-});
+})
 
 const createResizableColumn = function (col, resizer) {
   // Track the current position of mouse
-  let x = 0;
-  let w = 0;
+  let x = 0
+  let w = 0
 
   const mouseDownHandler = function (e) {
-    x = e.clientX;
+    x = e.clientX
 
     // Calculate the current width of column
-    const styles = window.getComputedStyle(col);
-    w = parseInt(styles.width, 10);
+    const styles = window.getComputedStyle(col)
+    w = parseInt(styles.width, 10)
 
     // Attach listeners for document's events
-    document.addEventListener("mousemove", mouseMoveHandler);
-    document.addEventListener("mouseup", mouseUpHandler);
-    resizer.classList.add("resizing");
-  };
+    document.addEventListener('mousemove', mouseMoveHandler)
+    document.addEventListener('mouseup', mouseUpHandler)
+    resizer.classList.add('resizing')
+  }
 
   const mouseMoveHandler = function (e) {
     // Determine how far the mouse has been moved
-    const dx = e.clientX - x;
+    const dx = e.clientX - x
 
     // Update the width of column
-    col.style.width = `${w + dx}px`;
-  };
+    col.style.width = `${w + dx}px`
+  }
 
   // When user releases the mouse, remove the existing event listeners
   const mouseUpHandler = function () {
-    document.removeEventListener("mousemove", mouseMoveHandler);
-    document.removeEventListener("mouseup", mouseUpHandler);
-    resizer.classList.remove("resizing");
-  };
+    document.removeEventListener('mousemove', mouseMoveHandler)
+    document.removeEventListener('mouseup', mouseUpHandler)
+    resizer.classList.remove('resizing')
+  }
 
-  resizer.addEventListener("mousedown", mouseDownHandler);
-};
+  resizer.addEventListener('mousedown', mouseDownHandler)
+}
 
 setTimeout(() => {
-  createResizableColumn(
-    document.querySelector(".task_card"),
-    document.querySelector(".resizer")
-  );
-}, 1000);
+  createResizableColumn(document.querySelector('.task_card'), document.querySelector('.resizer'))
+}, 1000)
 
 const onDrop = (e) => {
-  const taskId = parseInt(e.dataTransfer.getData("taskId"));
-  emits("redact-task-date", taskId, props.date);
-};
+  const taskId = parseInt(e.dataTransfer.getData('taskId'))
+  emits('redact-task-date', taskId, props.date)
+}
 
 const modalOpenRedact = (id) => {
-  emits("open");
-  emits("open-redact", id);
-};
+  emits('open')
+  emits('open-redact', id)
+}
 
 const deleteTodo = (id) => {
-  emits("delete-todo", id);
-};
+  emits('delete-todo', id)
+}
 
-const plusVisibility = ref("hidden");
+const plusVisibility = ref('hidden')
 
 const modalOpen = () => {
-  emits("open");
-  newCard();
-};
+  emits('open')
+  newCard()
+}
 
 // const onDrop = (taskId, startDate) => {};
 
 const changeCheckbox = (id) => {
-  emits("change-checkbox", id);
-};
+  emits('change-checkbox', id)
+}
 
 const newCard = () => {
-  emits("new-card");
-};
+  emits('new-card')
+}
 </script>
 
 <style scoped lang="scss">
@@ -204,8 +192,7 @@ const newCard = () => {
       width: 25px;
       padding: 0px;
       background: rgb(241, 241, 238);
-      box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px,
-        rgb(15 15 15 / 10%) 0px 2px 4px;
+      box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px, rgb(15 15 15 / 10%) 0px 2px 4px;
       top: 6px;
       left: 6px;
     }

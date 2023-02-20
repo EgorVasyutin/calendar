@@ -6,19 +6,18 @@ module.exports = {
   },
 
   parserOptions: {
-    parser: "@typescript-eslint/parser",
+    parser: '@typescript-eslint/parser',
   },
 
-  extends: [
-    "plugin:vue/vue3-essential",
-    "eslint:recommended",
-    "plugin:prettier/recommended",
-    "@vue/typescript",
-  ],
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:prettier/recommended', '@vue/typescript'],
 
   rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "newline-before-return": "error",
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'newline-before-return': 'error',
+    'vue/max-attributes-per-line': 'off',
+    // 'max-lines': ['warning', { skipComments: true }],
+
+    semi: ['error', 'never'],
   },
-};
+}

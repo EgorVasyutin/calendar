@@ -1,9 +1,40 @@
-import axios from "axios";
+import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:1000/api_calendar/",
+  baseURL: 'http://localhost:1000/api_calendar/',
   withCredentials: true,
   timeout: 1000,
-});
+})
 
-export default axiosInstance;
+axiosInstance.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
+
+  return config
+})
+
+axiosInstance.interceptors.response.use(
+  (config) => {
+    return config
+  },
+  async (error) => {
+    const originalRequest = error.config
+    if (error.response.status === 401 && originalRequest && !error.config._isRetry) {
+      originalRequest._isRetry = true
+      try {
+        // const response = await axiosInstance.get('api_calendar/refresh', {
+        //   withCredentials: true,
+        // })
+        // const response = await axiosInstance.get('refresh')
+        // console.log(response)
+        // localStorage.setItem('accessToken', response.data.accessToken)
+        //
+        // return axiosInstance.request(originalRequest)
+      } catch (e) {
+        console.log('НЕ АВТОРИЗОВАН')
+      }
+    }
+    throw error
+  },
+)
+
+export default axiosInstance

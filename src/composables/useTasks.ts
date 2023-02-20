@@ -1,46 +1,48 @@
-import { ref } from "vue";
-import axiosInstance from "@/axiosInstance";
-import { Task } from "@/types";
+import { ref } from 'vue'
+import axiosInstance from '@/axiosInstance'
+import { Task } from '@/types'
+import useAuth from '@/composables/useAuth'
+const auth = useAuth()
 
 const useTasks = () => {
-  const tasks = ref<Task[]>([]);
+  const tasks = ref<Task[]>([])
 
   const getCards = async () => {
     try {
-      const cards = await axiosInstance.get("todos");
-      console.log("cards", cards.data);
-      tasks.value = cards.data;
+      const cards = await axiosInstance.get(`todos/${auth.userId}`)
+      console.log('cards', cards.data)
+      tasks.value = cards.data
     } catch (e) {
-      console.error("Ошибка при запросе задач");
+      console.error('Ошибка при запросе задач')
     }
-  };
+  }
 
   const getOneCard = async (id) => {
     try {
-      const card = await axiosInstance.get(`todos/${id}`);
-      console.log("card", card.data[0]);
+      const card = await axiosInstance.get(`todos/${id}`)
+      console.log('card', card.data[0])
 
-      return card.data[0];
+      return card.data[0]
     } catch (e) {
-      console.error("Ошибка при запросе задач");
+      console.error('Ошибка при запросе задач')
     }
-  };
+  }
 
   const newCard = async (task: object) => {
-    await axiosInstance.post("todos", task);
-  };
+    await axiosInstance.post('todos', task)
+  }
 
   const redact = async (id, task: object) => {
-    await axiosInstance.put(`todos/${id}`, task);
-  };
+    await axiosInstance.put(`todos/${id}`, task)
+  }
 
   const deleteTodo = async (id) => {
-    await axiosInstance.delete(`todos/${id}`);
-  };
+    await axiosInstance.delete(`todos/${id}`)
+  }
 
   const patch = async (id, value: object) => {
-    await axiosInstance.patch(`todos/${id}`, value);
-  };
+    await axiosInstance.patch(`todos/${id}`, value)
+  }
 
   return {
     getCards,
@@ -50,7 +52,7 @@ const useTasks = () => {
     deleteTodo,
     patch,
     getOneCard,
-  };
-};
+  }
+}
 
-export default useTasks;
+export default useTasks
