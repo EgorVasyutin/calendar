@@ -1,8 +1,8 @@
 import axiosInstance from '@/axiosInstance'
 import { ref } from 'vue'
 
+const userId = ref(null)
 const useAuth = () => {
-  const userId = ref(null)
   const singUp = async (obj: object) => {
     try {
       return await axiosInstance.post('/sign-up', obj)

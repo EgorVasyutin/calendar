@@ -9,7 +9,13 @@ module.exports = {
     parser: '@typescript-eslint/parser',
   },
 
-  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:prettier/recommended', '@vue/typescript'],
+  extends: [
+    'plugin:vue/vue3-essential',
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    '@vue/typescript',
+  ],
 
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

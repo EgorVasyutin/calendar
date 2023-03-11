@@ -1,5 +1,5 @@
 <template>
-  <div class="popper" v-show="showPopper">
+  <div v-show="showPopper" class="popper">
     <slot />
   </div>
 </template>
@@ -8,7 +8,7 @@
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
   showPopper: {
-    type: Object,
+    type: Boolean,
     required: true,
   },
 })

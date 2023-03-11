@@ -1,17 +1,17 @@
 <template>
   <div
+    ref="day"
+    class="day"
     @drop="onDrop"
     @dragover.prevent
     @dragenter.prevent
-    ref="day"
-    class="day"
     @mouseover="() => (plusVisibility = 'visible')"
     @mouseleave="() => (plusVisibility = 'hidden')"
   >
     <div class="day__container--num">{{ date.slice(8, 10) }}</div>
-    <div class="card_adapt" v-for="task in tasks" :key="task.id" @click.stop="modalOpenRedact(task.id)"></div>
+    <!--    <div class="card_adapt" v-for="task in tasks" :key="task.id" @click.stop="modalOpenRedact(task.id)"></div>-->
     <div class="day__container">
-      <div class="day__container--plus" @click="modalOpen" :style="{ visibility: plusVisibility }">
+      <div class="day__container--plus" :style="{ visibility: plusVisibility }" @click="modalOpen">
         <svg viewBox="0 0 16 16" class="plus-svg">
           3
           <path
@@ -21,17 +21,15 @@
       </div>
     </div>
     <task-card
-      @mouseover="Resizable($event.target)"
-      v-for="task in tasks"
+      v-for="(task, index) in tasks"
       :key="task.id"
-      @click.stop="modalOpenRedact(task.id)"
+      :top="index * 200"
       class="task_card"
-      id="task"
       :task="task"
+      @click.stop="modalOpenRedact(task.id)"
       @click-on-checkbox="changeCheckbox(task.id)"
       @delete-todo="deleteTodo(task.id)"
     >
-      <div class="resizer"></div>
     </task-card>
   </div>
 </template>
@@ -62,48 +60,12 @@ const props = defineProps({
   },
 })
 
-const createResizableColumn = function (col, resizer) {
-  // Track the current position of mouse
-  let x = 0
-  let w = 0
-
-  const mouseDownHandler = function (e) {
-    x = e.clientX
-
-    // Calculate the current width of column
-    const styles = window.getComputedStyle(col)
-    w = parseInt(styles.width, 10)
-
-    // Attach listeners for document's events
-    document.addEventListener('mousemove', mouseMoveHandler)
-    document.addEventListener('mouseup', mouseUpHandler)
-    resizer.classList.add('resizing')
-  }
-
-  const mouseMoveHandler = function (e) {
-    // Determine how far the mouse has been moved
-    const dx = e.clientX - x
-
-    // Update the width of column
-    col.style.width = `${w + dx}px`
-  }
-
-  // When user releases the mouse, remove the existing event listeners
-  const mouseUpHandler = function () {
-    document.removeEventListener('mousemove', mouseMoveHandler)
-    document.removeEventListener('mouseup', mouseUpHandler)
-    resizer.classList.remove('resizing')
-  }
-
-  resizer.addEventListener('mousedown', mouseDownHandler)
-}
-
-setTimeout(() => {
-  createResizableColumn(document.querySelector('.task_card'), document.querySelector('.resizer'))
-}, 1000)
+const day = ref(null)
 
 const onDrop = (e) => {
   const taskId = parseInt(e.dataTransfer.getData('taskId'))
+  if (!taskId) return
+
   emits('redact-task-date', taskId, props.date)
 }
 
@@ -135,21 +97,6 @@ const newCard = () => {
 </script>
 
 <style scoped lang="scss">
-.resizer {
-  background-color: #9d0000;
-  position: absolute;
-  height: 100%;
-  top: 0;
-  right: 0;
-  width: 5px;
-  cursor: col-resize;
-  user-select: none;
-}
-
-.resizer:hover,
-.resizing {
-  border-right: 2px solid blue;
-}
 .card_adapt__container {
   display: none;
 }
@@ -168,6 +115,7 @@ const newCard = () => {
 .day {
   min-height: 250px;
   flex: 1 0 0px;
+  position: relative;
   border-right: 1px solid rgb(233, 233, 231);
   border-bottom: 1px solid rgb(233, 233, 231);
   cursor: default;
@@ -215,6 +163,7 @@ const newCard = () => {
     margin-right: 50px;
   }
   .day {
+    position: relative;
     min-height: 200px;
     flex: 1 0 0px;
     border-right: 1px solid rgb(233, 233, 231);

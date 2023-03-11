@@ -8,7 +8,7 @@
     </div>
     <div class="header-right">
       <div class="modal-header__container-icons--right">
-        <app-button label="Выйти" @click="routeLogin" :outlined="true" class="form-btm" />
+        <app-button label="Выйти" :outlined="true" class="form-btm" @click="routeLogin" />
       </div>
     </div>
   </header>

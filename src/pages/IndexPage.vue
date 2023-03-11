@@ -19,10 +19,10 @@
       </div>
       <div class="month-switch">
         <div class="month-switch__arrow-left">
-          <img src="../assets/img/arrow-left.svg" @click="scrollMonthAgo" class="month-switch__arrow-left--svg" />
+          <img src="../assets/img/arrow-left.svg" class="month-switch__arrow-left--svg" @click="scrollMonthAgo" />
         </div>
         <div class="month-switch__text" @click="scrollToday">Сегодня</div>
-        <div @click="scrollMonthBefore" class="month-switch__arrow-right">
+        <div class="month-switch__arrow-right" @click="scrollMonthBefore">
           <img src="../assets/img/arrow-right.svg" class="month-switch__arrow-left--svg" />
         </div>
       </div>
@@ -41,6 +41,7 @@
             v-for="(fieldLine, idx) in dats.length"
             :key="fieldLine"
             :date="dats[idx]"
+            :mouse-field-date="mouseFieldDate"
             :tasks="getFieldTasks(dats[idx].slice(0, 11))"
             @open="modalOpen"
             @new-card="createCard"
@@ -48,17 +49,18 @@
             @change-checkbox="changeCheckbox"
             @delete-todo="deleteTask"
             @redact-task-date="changeTaskStartDate"
+            @mouseenter="setMouseFieldDate(dats[idx])"
           />
         </div>
       </div>
     </div>
   </div>
-  <modal-window :modal-open="modalValue" @modal-close="modalClose" @on-copy="onCopy">
+  <modal-window :modal-open="modalValue" @modal-close="modalClose" @on-copy="onCopy" @delete-todo-modal="deleteTask">
     <task-form
       :created="false"
-      :taskId="idTodo"
+      :task-id="idTodo"
+      :is-done-props="task.isDone"
       @clickOnCheckbox="clickOnCheckbox(idTodo)"
-      :isDoneProps="task.isDone"
       @update-task="updateTask"
     />
   </modal-window>
@@ -74,8 +76,11 @@ import modalWindow from '@/UI/ModalWindow.vue'
 import { Task } from '@/types'
 
 import TaskForm from '@/components/TaskForm.vue'
+import useMouseField from '@/composables/useMouseField'
 
 const { tasks, getCards, deleteTodo, patch, getOneCard, newCard } = useTasks()
+
+const { mouseFieldDate, setMouseFieldDate } = useMouseField()
 
 const idTodo = ref('')
 
@@ -219,8 +224,8 @@ const getFieldTasks = (date: string): Task[] => {
   return tasks.value.filter((task) => task.startDate.slice(0, 11) <= date && date <= task.endDate.slice(0, 11))
 }
 
-const deleteTask = (id) => {
-  deleteTodo(id).then(getCards)
+const deleteTask = () => {
+  deleteTodo(idTodo.value).then(getCards)
 }
 
 const modalClose = () => {

@@ -1,6 +1,6 @@
 <template>
   <div class="modal-content__title">
-    <input class="modal-content__input" placeholder="Untitled" v-model="task.title" />
+    <input v-model="task.title" class="modal-content__input" placeholder="Untitled" />
   </div>
   <div class="modal-content__table">
     <div class="modal-content__table--string">
@@ -9,7 +9,7 @@
         <div class="string-text">Data</div>
       </div>
       <div class="container--data">
-        <datepicker range lang="en" type="date" v-model="dateModel" class="startData" placeholder="Start data " />
+        <datepicker v-model="dateModel" range lang="en" type="date" class="startData" placeholder="Start data " />
       </div>
     </div>
     <div class="modal-content__table--string">
@@ -34,7 +34,7 @@
         <div class="string-text">Приоритет</div>
         <app-popper
           class="popper"
-          :showPopper="showPopperPriority"
+          :show-popper="showPopperPriority"
           @close="openAndClosePopper('priority')"
           @click.stop.prevent
         >
@@ -43,7 +43,7 @@
           <button class="popper__btm-tag" @click="clickOnTag('priority', $event)">3</button>
         </app-popper>
       </div>
-      <div class="green string-text-2 string-right priority">
+      <div ref="priority" class="green string-text-2 string-right priority">
         {{ task.priority }}
       </div>
     </div>
@@ -53,7 +53,7 @@
         <div class="string-text">Статус</div>
         <app-popper
           class="popper"
-          :showPopper="showPopperStatus"
+          :show-popper="showPopperStatus"
           @close="openAndClosePopper('status')"
           @click.stop.prevent
         >
@@ -62,19 +62,24 @@
           <button class="popper__btm-tag" @click="clickOnTag('status', $event)">3</button>
         </app-popper>
       </div>
-      <div class="string-right string-text-2 status">{{ task.status }}</div>
+      <div ref="status" class="string-right string-text-2 status">{{ task.status }}</div>
     </div>
     <div class="modal-content__table--string">
       <div class="string-left" @click="openAndClosePopper('type')">
         <img src="../assets/img/multiselect.svg" class="string-left__icon" />
         <div class="string-text">Тип</div>
-        <app-popper class="popper" :showPopper="showPopperType" @close="openAndClosePopper('type')" @click.stop.prevent>
+        <app-popper
+          class="popper"
+          :show-popper="showPopperType"
+          @close="openAndClosePopper('type')"
+          @click.stop.prevent
+        >
           <button class="popper__btm-tag" @click="clickOnTag('type', $event)">1</button>
           <button class="popper__btm-tag" @click="clickOnTag('type', $event)">2</button>
           <button class="popper__btm-tag" @click="clickOnTag('type', $event)">3</button>
         </app-popper>
       </div>
-      <div class="string-right string-text-2 type">{{ task.type }}</div>
+      <div ref="type" class="string-right string-text-2 type">{{ task.type }}</div>
     </div>
     <div class="modal-content__table--string add-property">
       <div class="string-left">
@@ -151,6 +156,10 @@ watch(
   },
   { deep: true },
 )
+
+const priority = ref(null)
+const type = ref(null)
+const status = ref(null)
 // eslint-disable-next-line no-unused-vars
 let modalValue = ref(false)
 
@@ -168,19 +177,19 @@ const openAndClosePopper = (name) => {
 
 const clickOnTag = (name, e) => {
   if (name === 'priority') {
-    document.querySelector('.priority').innerHTML = e.target.innerHTML
+    priority.value.innerHTML = e.target.innerHTML
     // if (refProps.created.value !== true) task.value.priority = e.target.innerHTML;
     task.value.priority = e.target.innerHTML
   }
 
   if (name === 'status') {
-    document.querySelector('.status').innerHTML = e.target.innerHTML
+    status.value.innerHTML = e.target.innerHTML
     // if (refProps.created.value !== true) task.value.status = e.target.innerHTML;
     task.value.status = e.target.innerHTML
   }
 
   if (name === 'type') {
-    document.querySelector('.type').innerHTML = e.target.innerHTML
+    type.value.innerHTML = e.target.innerHTML
     // if (refProps.created.value !== true) task.value.type = e.target.innerHTML;
     task.value.type = e.target.innerHTML
   }
@@ -192,11 +201,6 @@ watch(dateModel, () => {
     task.value.endDate = dateModel.value[1].toISOString()
   }
 })
-
-// watch(refProps.created.value, () => {
-//   console.log(1);
-//   if (refProps.created.value === true) newCard(task.value).then(getCards);
-// });
 </script>
 
 <style scoped lang="scss">
