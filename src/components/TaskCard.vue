@@ -2,10 +2,10 @@
   <div
     ref="card"
     class="card"
-    :style="{ top: top + 45 + 'px', width: cardWidth }"
+    :style="{ top: top + 45 + 'px', width: cardWidth, left: left + 'px' }"
     @click.right.prevent="openAndClosePopper"
   >
-    <div ref="resizer_left" class="resizer_left" draggable="true" @drag="onResizeLeftStart"></div>
+    <div ref="resizer_left" class="resizer_left" draggable="true" @drag="onResizeLeftStart" @dragend="onMouseUp"></div>
     <div class="card_container">
       <div class="card-content" draggable="true" @dragenter.prevent @dragover.prevent @dragstart="onDragStart">
         <div class="card-content__name">{{ task.title }}</div>
@@ -69,20 +69,31 @@ const { mouseFieldDate } = useMouseField()
 const initialCardWidth = ref(0)
 const cardWidth = ref('260px')
 
+const left = ref(0)
+
 const card = ref(null)
 const resizer_right = ref(null)
 
 const datsCard = ref({ startDate: mouseFieldDate.value, endDate: mouseFieldDate.value })
+
+const widthCheck = () => {
+  const endDate = new Date(props.task.endDate).getDate()
+  const startDate = new Date(props.task.startDate).getDate()
+  console.log(endDate - startDate)
+  if (endDate - startDate <= 0) {
+    return
+  }
+  cardWidth.value = (endDate - startDate + 1) * 260 + 'px'
+}
+widthCheck()
 
 const onResizeRightStart = (e) => {
   const resizerRect = e.target.getBoundingClientRect()
   const resizerEdgeX = resizerRect.x + resizerRect.width
   console.log(resizerRect.x, resizerRect.width)
   const mouseX = e.clientX
+  const endDate = new Date(datsCard.value.endDate)
   if (resizerEdgeX < mouseX) {
-    // console.log(datsCard.value)
-    // console.log(datsCard.value.end.getDate())
-    const endDate = new Date(datsCard.value.endDate)
     endDate.setDate(endDate.getDate() + 1)
     datsCard.value.endDate = endDate.toISOString()
     const prevW = parseInt(cardWidth.value, 10)
@@ -90,6 +101,8 @@ const onResizeRightStart = (e) => {
     console.log(datsCard.value)
   }
   if (resizerEdgeX - 260 > mouseX) {
+    endDate.setDate(endDate.getDate() - 1)
+    datsCard.value.endDate = endDate.toISOString()
     const prevW = parseInt(cardWidth.value, 10)
     cardWidth.value = prevW - 260 + 'px'
     console.log('123', prevW, cardWidth.value)
@@ -97,18 +110,23 @@ const onResizeRightStart = (e) => {
 }
 
 const onResizeLeftStart = (e) => {
+  console.log(e)
   const resizerRect = e.target.getBoundingClientRect()
-  // console.log(resizerRect)
   const resizerEdgeX = resizerRect.x - resizerRect.width
-  console.log(resizerRect.x, resizerRect.width, 'asds')
   const mouseX = e.clientX
+  const startDate = new Date(datsCard.value.startDate)
   if (resizerEdgeX > mouseX) {
-    card.value.style.left = card.value.style.left - 260 + 'px'
+    startDate.setDate(startDate.getDate() - 1)
+    datsCard.value.startDate = startDate.toISOString()
+    left.value = left.value - 260
     const prevW = parseInt(cardWidth.value, 10)
     cardWidth.value = prevW + initialCardWidth.value + 'px'
   }
-  if (resizerEdgeX - 260 > mouseX) {
-    console.log('adasdasdasdasdasdas')
+  if (cardWidth.value === '260px') return
+  if (resizerEdgeX + 260 < mouseX) {
+    startDate.setDate(startDate.getDate() + 1)
+    datsCard.value.startDate = startDate.toISOString()
+    left.value = left.value + 260
     const prevW = parseInt(cardWidth.value, 10)
     cardWidth.value = prevW - 260 + 'px'
   }
@@ -201,7 +219,7 @@ const clickOnCheckbox = () => {
 
 .card {
   position: absolute;
-  left: 0;
+  left: 1px;
   right: 0;
   padding: 3px 6px;
   height: 200px;

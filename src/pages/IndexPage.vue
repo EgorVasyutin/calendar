@@ -221,7 +221,7 @@ const scrollMonthBefore = () => {
 }
 
 const getFieldTasks = (date: string): Task[] => {
-  return tasks.value.filter((task) => task.startDate.slice(0, 11) <= date && date <= task.endDate.slice(0, 11))
+  return tasks.value.filter((task) => task.startDate.slice(0, 11) === date)
 }
 
 const deleteTask = () => {
