@@ -81,18 +81,6 @@
       </div>
       <div ref="type" class="string-right string-text-2 type">{{ task.type }}</div>
     </div>
-    <div class="modal-content__table--string add-property">
-      <div class="string-left">
-        <img src="../assets/img/plus.svg" class="string-left__icon" />
-        <div class="string-text">Add property</div>
-      </div>
-    </div>
-    <div class="div"></div>
-    <div class="comments__div">
-      <div class="comments"></div>
-      <input class="comments__input" placeholder="Add a comment..." />
-      <div class="comment__div--line"></div>
-    </div>
   </div>
 </template>
 

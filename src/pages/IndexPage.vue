@@ -2,15 +2,8 @@
   <div class="content">
     <div class="content-menu__fn">
       <div class="content-menu__fn__container">
-        <div class="content-menu__fn__container--field filter">Фильтр</div>
         <div class="content-menu__fn__container--field search"></div>
-        <div class="content-menu__fn__container--field arrows">
-          <img src="../assets/img/dots.svg" class="dots" />
-        </div>
         <div class="new" @click="modalOpen">New</div>
-        <div class="new__arrow" @click="modalOpen">
-          <img src="../assets/img/chevronDown.svg" class="chevronDown" />
-        </div>
       </div>
     </div>
     <div class="data-switch__container">
@@ -131,9 +124,14 @@ const modalOpenRedact = (id) => {
   idTodo.value = id
 }
 
-const changeTaskStartDate = (id, date) => {
+const changeTaskStartDate = (id, date, width) => {
+  const del = ref(parseInt(width, 10) / 260)
+  if (del.value === 1) del.value = 0
+  console.log(del, 'del')
+  const date2 = new Date(date)
+  date2.setDate(date2.getDate() + del.value)
   patch(id, { startDate: date })
-  patch(id, { endDate: date }).then(getCards)
+  patch(id, { endDate: date2.toISOString() }).then(getCards)
 }
 
 const changeCheckbox = async (id) => {

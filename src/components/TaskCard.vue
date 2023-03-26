@@ -152,6 +152,7 @@ const onDragStart = (e) => {
   e.dataTransfer.dropEffect = 'move'
   e.dataTransfer.effectAllowed = 'move'
   e.dataTransfer.setData('taskId', props.task.id)
+  e.dataTransfer.setData('taskWidth', cardWidth.value)
 }
 
 const deleteTodo = () => {

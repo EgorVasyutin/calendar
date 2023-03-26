@@ -59,9 +59,10 @@ const day = ref(null)
 
 const onDrop = (e) => {
   const taskId = parseInt(e.dataTransfer.getData('taskId'))
+  const taskWidth = parseInt(e.dataTransfer.getData('taskWidth'))
   if (!taskId) return
 
-  emits('redact-task-date', taskId, props.date)
+  emits('redact-task-date', taskId, props.date, taskWidth)
 }
 
 const modalOpenRedact = (id) => {

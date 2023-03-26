@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppPopper from '@/UI/AppPopper.vue'
 import { ref } from 'vue'
-import ModalIcons from '@/components/ModalIcons.vue'
 // eslint-disable-next-line no-unused-vars,no-undef
 const props = defineProps({
   modalOpen: {
@@ -40,20 +39,11 @@ const onCopy = () => {
       <div class="modal-header">
         <slot name="header" />
         <div class="modal-header__container">
-          <div class="modal-header__container-icons--left">
-            <div class="icon--left arrows">
-              <img src="../assets/img/arrows.svg" />
-            </div>
-            <div class="icon--left display">
-              <img src="../assets/img/switchdisplay.svg" />
-            </div>
-            <!--            <div class="line"></div>-->
-          </div>
+          <div class="modal-header__container-icons--left"></div>
           <div class="modal-header__container-icons--right">
-            <modal-icons></modal-icons>
             <div class="icon__ellipsis--left" @click="openAndClosePopper">
               <img src="../assets/img/dots.svg" />
-              <app-popper class="popper" :showPopper="showPopper" @close="openAndClosePopper" @click.stop>
+              <app-popper class="popper" :show-popper="showPopper" @close="openAndClosePopper" @click.stop>
                 <button class="popper__btm" @click="deleteTodo">Delete</button>
                 <button class="popper__btm" @click="onCopy">Copy</button>
               </app-popper>
@@ -101,7 +91,7 @@ const onCopy = () => {
   left: 72px;
   right: 72px;
   margin-right: auto;
-  height: calc(100% - 144px);
+  height: calc(100% - 300px);
 
   &-header {
     z-index: 3;
