@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://celadon-starlight-695c81.netlify.app/',
+  baseURL: 'https://celadon-starlight-695c81.netlify.app',
   withCredentials: true,
   timeout: 1000,
 })
