@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://cw90932.tw1.ru/users/',
+  baseURL: 'https://cw90932.tw1.ru/',
   withCredentials: true,
   timeout: 1000,
 })
