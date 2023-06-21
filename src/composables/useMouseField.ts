@@ -1,10 +1,13 @@
 import { ref } from 'vue'
 
-const mouseFieldDate = ref(null)
+const mouseFieldDate = ref({})
 
 const useMouseField = () => {
-  const setMouseFieldDate = (date: string | null) => {
-    mouseFieldDate.value = date
+  const setMouseFieldDate = (startDate: string | null, endDate: string | null) => {
+    // @ts-ignore
+    mouseFieldDate.value.startDate = startDate
+    // @ts-ignore
+    mouseFieldDate.value.endDate = endDate
   }
 
   return { setMouseFieldDate, mouseFieldDate }

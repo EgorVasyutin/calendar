@@ -9,10 +9,10 @@
     @mouseleave="plusVisibility = 'hidden'"
   >
     <div class="day__container--num">{{ date.slice(8, 10) }}</div>
-    <!--    <div class="card_adapt" v-for="task in tasks" :key="task.id" @click.stop="modalOpenRedact(task.id)"></div>-->
+    <div v-for="task in tasks" :key="task.id" class="card_adapt" @click.stop="modalOpenRedact(task.id)"></div>
     <div class="day__container">
       <div class="day__container--plus" :style="{ visibility: plusVisibility }" @click="modalOpen">
-        <img src="../assets/img/plus.svg" />
+        <img src="../assets/img/plus.svg" class="plus" />
       </div>
     </div>
     <task-card
@@ -101,7 +101,8 @@ const newCard = () => {
   display: none;
 }
 
-.plus-svg {
+.plus {
+  cursor: pointer;
   width: 16px;
   height: 16px;
   display: inline-block;

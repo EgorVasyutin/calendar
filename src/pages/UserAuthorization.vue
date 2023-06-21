@@ -3,36 +3,36 @@
     <div class="text">Authorization</div>
     <div>
       <app-input
+        v-model:value="v.nameField.$model"
         placeholder="Name"
         label="Your name"
-        v-model:value="v.nameField.$model"
         :error="v.nameField.$errors"
       ></app-input>
       <app-input
+        v-model:value="v.emailField.$model"
         type="email"
         placeholder="Email"
         label="Your email"
-        v-model:value="v.emailField.$model"
         :error="v.emailField.$errors"
       ></app-input>
       <app-input
+        v-model:value="v.passwordField.$model"
         type="password"
         placeholder="Password"
         label="Your password"
-        v-model:value="v.passwordField.$model"
         :error="v.passwordField.$errors"
       ></app-input>
       <app-input
+        v-model:value="v.confirmPasswordField.$model"
         type="password"
         placeholder="Confirm password"
         label="Confirm password"
-        v-model:value="v.confirmPasswordField.$model"
         :error="v.confirmPasswordField.$errors"
       ></app-input>
     </div>
     <app-button label="Авторизоваться" />
   </form>
-  <app-button label="Войти" :outlined="true" @click="routeLogin" class="form-btm" />
+  <app-button label="Войти" :outlined="true" class="form-btm" @click="routeLogin" />
 </template>
 
 <script setup lang="ts">

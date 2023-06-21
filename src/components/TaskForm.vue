@@ -25,7 +25,7 @@
         <div class="string-text">Готово</div>
       </div>
       <div class="string-right string-text">
-        <input type="checkbox" class="checkbox" :checked="isDoneProps" @click="emits('clickOnCheckbox')" />
+        <input type="checkbox" class="checkbox" :checked="isDoneProps" @click="clickOnCheckbox" />
       </div>
     </div>
     <div class="modal-content__table--string">
@@ -113,7 +113,7 @@ const props = defineProps({
 // const refProps = toRefs(props);
 
 // eslint-disable-next-line no-undef
-const emits = defineEmits(['modal-data', 'task', 'update-task'])
+const emits = defineEmits(['modal-data', 'task', 'update-task', 'clickOnCheckbox'])
 
 const dateModel = ref('')
 
@@ -189,6 +189,11 @@ watch(dateModel, () => {
     task.value.endDate = dateModel.value[1].toISOString()
   }
 })
+
+const clickOnCheckbox = () => {
+  console.log(123)
+  emits('clickOnCheckbox', props.taskId)
+}
 </script>
 
 <style scoped lang="scss">

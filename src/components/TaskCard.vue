@@ -44,7 +44,6 @@
 <script setup lang="ts">
 import AppPopper from '@/UI/AppPopper.vue'
 import { onMounted, ref } from 'vue'
-import useMouseField from '@/composables/useMouseField'
 import useTasks from '@/composables/useTasks'
 // eslint-disable-next-line no-undef,no-unused-vars
 const emit = defineEmits(['clickOnCheckbox', 'delete-todo', 'drop-task'])
@@ -64,8 +63,6 @@ console.log(props.task)
 
 const { patch } = useTasks()
 
-const { mouseFieldDate } = useMouseField()
-
 const initialCardWidth = ref(0)
 const cardWidth = ref('260px')
 
@@ -74,7 +71,7 @@ const left = ref(0)
 const card = ref(null)
 const resizer_right = ref(null)
 
-const datsCard = ref({ startDate: mouseFieldDate.value, endDate: mouseFieldDate.value })
+const datsCard = ref({ startDate: props.task.startDate, endDate: props.task.endDate })
 
 const widthCheck = () => {
   const endDate = new Date(props.task.endDate).getDate()
@@ -98,7 +95,6 @@ const onResizeRightStart = (e) => {
     datsCard.value.endDate = endDate.toISOString()
     const prevW = parseInt(cardWidth.value, 10)
     cardWidth.value = prevW + initialCardWidth.value + 'px'
-    console.log(datsCard.value)
   }
   if (resizerEdgeX - 260 > mouseX) {
     endDate.setDate(endDate.getDate() - 1)
@@ -225,7 +221,7 @@ const clickOnCheckbox = () => {
   padding: 3px 6px;
   height: 200px;
   width: 250px;
-  z-index: 123;
+  z-index: 99;
 }
 .card_container:hover {
   background-color: #eeeeee;

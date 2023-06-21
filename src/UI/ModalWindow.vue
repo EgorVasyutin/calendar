@@ -9,10 +9,11 @@ const props = defineProps({
   },
 })
 // eslint-disable-next-line no-undef,no-unused-vars
-const emit = defineEmits(['modal-close', 'delete-todo-modal', 'on-copy'])
+const emit = defineEmits(['modal-close', 'delete-todo-modal', 'on-copy', 'create-task'])
 
 const closeModal = () => {
   emit('modal-close')
+  emit('create-task')
 }
 
 const deleteTodo = () => {
@@ -91,7 +92,7 @@ const onCopy = () => {
   left: 72px;
   right: 72px;
   margin-right: auto;
-  height: calc(100% - 300px);
+  height: 600px;
 
   &-header {
     z-index: 3;
@@ -133,12 +134,12 @@ const onCopy = () => {
 
 .modal-overlay {
   background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 100;
 }
 .line {
   margin-top: 20px;

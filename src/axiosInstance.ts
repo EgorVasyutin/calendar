@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://cw90932.tw1.ru/',
+  baseURL: 'http://localhost:1000/api_calendar/',
   withCredentials: true,
   timeout: 1000,
 })

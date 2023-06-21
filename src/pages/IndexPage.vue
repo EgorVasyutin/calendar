@@ -34,7 +34,6 @@
             v-for="(fieldLine, idx) in dats.length"
             :key="fieldLine"
             :date="dats[idx]"
-            :mouse-field-date="mouseFieldDate"
             :tasks="getFieldTasks(dats[idx].slice(0, 11))"
             @open="modalOpen"
             @new-card="createCard"
@@ -42,25 +41,30 @@
             @change-checkbox="changeCheckbox"
             @delete-todo="deleteTask"
             @redact-task-date="changeTaskStartDate"
-            @mouseenter="setMouseFieldDate(dats[idx])"
           />
         </div>
       </div>
     </div>
   </div>
-  <modal-window :modal-open="modalValue" @modal-close="modalClose" @on-copy="onCopy" @delete-todo-modal="deleteTask">
+  <modal-window
+    :modal-open="modalValue"
+    @new-card="createCard"
+    @modal-close="modalClose"
+    @on-copy="onCopy"
+    @delete-todo-modal="deleteTask"
+  >
     <task-form
       :created="false"
       :task-id="idTodo"
       :is-done-props="task.isDone"
-      @clickOnCheckbox="clickOnCheckbox(idTodo)"
+      @clickOnCheckbox="changeCheckbox"
       @update-task="updateTask"
     />
   </modal-window>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import AppField from '@/components/AppField.vue'
 import useTasks from '@/composables/useTasks'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -69,11 +73,8 @@ import modalWindow from '@/UI/ModalWindow.vue'
 import { Task } from '@/types'
 
 import TaskForm from '@/components/TaskForm.vue'
-import useMouseField from '@/composables/useMouseField'
 
 const { tasks, getCards, deleteTodo, patch, getOneCard, newCard } = useTasks()
-
-const { mouseFieldDate, setMouseFieldDate } = useMouseField()
 
 const idTodo = ref('')
 
@@ -113,11 +114,8 @@ const clickOnCheckbox = async (id) => {
 
 // const createCard = false;
 
-const createCard = () => {
-  //без watch-а
-  watch(modalValue, async () => {
-    await newCard(task.value).then(await getCards)
-  })
+const createCard = async () => {
+  newCard(task.value).then(await getCards)
 }
 
 const modalOpenRedact = (id) => {
@@ -222,7 +220,13 @@ const getFieldTasks = (date: string): Task[] => {
   return tasks.value.filter((task) => task.startDate.slice(0, 11) === date)
 }
 
-const deleteTask = () => {
+const deleteTask = (id) => {
+  if (id !== undefined) {
+    deleteTodo(id).then(getCards)
+
+    return
+  }
+
   deleteTodo(idTodo.value).then(getCards)
 }
 
